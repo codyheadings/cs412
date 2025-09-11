@@ -1,0 +1,24 @@
+<!-- quotes/templates/quotes/base.html -->
+ 
+{% load static %}
+<html>
+    <head>
+        <title>Hello, world!</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+    
+    <body>
+        <nav>
+            <ul>
+                <li><a href="{% url 'quote' %}">Quote</a></li>
+                <li><a href="{% url 'show_all' %}">Show All</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+            </ul>
+        </nav>
+        {% block content %}
+        {% endblock %}
+        <footer>
+            <hr>
+            Created by Cody Headings for CS412.
+        </footer>
+    </body>

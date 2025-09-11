@@ -1,0 +1,13 @@
+<!-- quotes/templates/quotes/quote.html -->
+ 
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+<div>
+    <h1>Quote of the Day</h1>
+    <p>
+        {{quote}}
+        {{image}}
+    </p>
+</div>
+{% endblock %}
