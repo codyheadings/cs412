@@ -24,3 +24,5 @@ urlpatterns = [
     path("hw/", include("hw.urls")),
     path("quotes/", include("quotes.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

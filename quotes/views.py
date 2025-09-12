@@ -8,15 +8,22 @@ import random
 
 # Global lists of quotes and image urls
 quote_list = [
-    "1",
-    "2",
-    "3",
+    "“The only true wisdom is in knowing you know nothing.”",
+    "“The unexamined life is not worth living.”",
+    "“There is only one good, knowledge, and one evil, ignorance.”",
+    "“Be kind, for everyone you meet is fighting a hard battle.”",
+    "“Strong minds discuss ideas, average minds discuss events, weak minds discuss people.”",
+    "“Wonder is the beginning of wisdom.”",
+    "“Education is the kindling of a flame, not the filling of a vessel.”",
+    "“Know thyself.”",
 ]
 
 image_list = [
-    "url1",
-    "url2",
-    "url3",
+    "../media/SocratesPainting.png",
+    "../media/SocratesPortrait.jpg",
+    "../media/SocratesStatue.jpeg",
+    "../media/SocratesStatueHead.jpg",
+    "../media/SocratesStatueSeated.jpg",
 ]
 
 # Create your views here.
@@ -24,8 +31,8 @@ def quote(request):
     """Respond to the URL 'quote' and '', delegate work to a template."""
 
     template_name = 'quotes/quote.html'
-    quote_number = random.randint(0,len(quote_list))
-    image_number = random.randint(0,len(image_list))
+    quote_number = random.randint(1,len(quote_list))-1
+    image_number = random.randint(1,len(image_list))-1
 
     # a dict of context variables (key value pairs)
     context = {

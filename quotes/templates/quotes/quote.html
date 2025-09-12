@@ -5,9 +5,16 @@
 {% block content %}
 <div>
     <h1>Quote of the Day</h1>
-    <p>
+    <p id="random_quote">
         {{quote}}
-        {{image}}
     </p>
+    <div id="attribution">
+        <p>
+            —Socrates, Greek Philosopher
+        </p>
+        <p>470-399 BCE</p>
+    </div>
+    <br>
+    <img src="{{image}}" alt="Socrates" width="500px">
 </div>
 {% endblock %}

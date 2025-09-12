@@ -4,10 +4,17 @@
 
 {% block content %}
 <div>
-    <h1>Quote of the Day</h1>
+    <h1>All Socrates Quotes</h1>
+    <!-- For loop iterates over list of quotes and displays them on page -->
+    {% for quote in quotes%}
     <p>
-        {{quotes}}
-        {{images}}
+        {{quote}}
     </p>
+    {% endfor %}
+    <!-- For loop iterates over image urls and assigns them to src field -->
+    {% for image in images%}
+    <img src="{{image}}" alt="Image of Socrates" width="500px">
+    <br><br>
+    {% endfor %}
 </div>
 {% endblock %}
