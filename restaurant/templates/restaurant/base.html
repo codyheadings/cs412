@@ -1,0 +1,26 @@
+<!-- restaurant/templates/restaurant/base.html -->
+<!-- Cody Headings, codyh@bu.edu, 9/15/25 -->
+<!-- html template that provides head and body with block content that 
+     will be filled by other templates. -->
+ 
+{% load static %}
+<html>
+    <head>
+        <title>Main Page</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+    
+    <body>
+        <nav>
+            <ul>
+                <li><a href="{% url 'main' %}">Main Page</a></li>
+                <li><a href="{% url 'order' %}">Place an Order</a></li>
+            </ul>
+        </nav>
+        {% block content %}
+        {% endblock %}
+        <footer>
+            <hr>
+            Created by Cody Headings for CS412
+        </footer>
+    </body>

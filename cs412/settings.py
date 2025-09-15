@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'hw', # NEW
     'formdata', #examples for week of 9/16
     'quotes', #a1
+    'restaurant', #a2
 ]
 
 MIDDLEWARE = [
