@@ -1,0 +1,17 @@
+<!-- formdata/templates/formdata/base.html -->
+<!-- Cody Headings, codyh@bu.edu, 9/15/25 -->
+<!-- html template that provides head and body with block content that 
+     will be filled by other templates. -->
+ 
+{% load static %}
+<html>
+    <head>
+        <title>Form Data Example</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+    
+    <body>
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>

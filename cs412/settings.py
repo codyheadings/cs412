@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'hw', # NEW
+    'formdata', #examples for week of 9/16
     'quotes', #a1
 ]
 
