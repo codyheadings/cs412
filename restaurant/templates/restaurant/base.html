@@ -6,21 +6,20 @@
 {% load static %}
 <html>
     <head>
-        <title>Main Page</title>
-        <link rel="stylesheet" href="{% static 'styles.css' %}">
+        <title>Bab On Grill</title>
+        <link rel="stylesheet" href="{% static 'restaurant_styles.css' %}">
     </head>
     
     <body>
         <nav>
             <ul>
                 <li><a href="{% url 'main' %}">Main Page</a></li>
-                <li><a href="{% url 'order' %}">Place an Order</a></li>
+                <li><a href="{% url 'order' %}">Order Now</a></li>
             </ul>
         </nav>
         {% block content %}
         {% endblock %}
         <footer>
-            <hr>
             Created by Cody Headings for CS412
         </footer>
     </body>
