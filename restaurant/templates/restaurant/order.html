@@ -9,6 +9,69 @@
     <h1>Place an Order</h1>
     <hr>
 
+    <form action="{% url 'confirmation' %}" method="POST">
+        {% csrf_token %}
+
+        <h3>Menu Items:</h3>
+        <div>
+            <input type="checkbox" name="special">
+            Daily Special: {{daily_special}} | 12.99
+        </div>
+        <div>
+            <input type="checkbox" name="brisket">
+            Barbeque Brisket | 13.49
+        </div>
+        
+        <div>
+            <input type="checkbox" class="chicken" id="chicken" name="chicken">
+            <label for="chicken">Spicy Fried Chicken | 11.99</label>
+
+            <label class="hidden-c">
+                <input type="checkbox" name="plain">
+                 + Make it Plain | 0.00
+            </label>
+            <label class="hidden-c">
+                <input type="checkbox" name="extra-spice">
+                 + Extra Spice! | 0.25
+            </label>
+        </div>
+        
+        <div>
+            <input type="checkbox" class="burger" id="burger" name="burger">
+            <label for="burger">Bab's Best Burger | 10.99</label>
+
+            <label class="hidden-b">
+                <input type="checkbox" id="second-patty" name="second-patty">
+                + Second Patty | 1.99
+            </label>
+            <label class="hidden-b">
+                <input type="checkbox" id="bbq-bacon" name="bbq-bacon">
+                + BBQ Bacon | 1.49
+            </label>
+            <label class="hidden-b">
+                <input type="checkbox" id="premium-cheddar" name="premium-cheddar">
+                + Premium Cheddar | 0.50
+            </label>
+        </div>
+        
+
+        <h3>Special Instructions:</h3>
+        <textarea name="instructions" rows="4" cols="60"></textarea>
+
+        <h3>Contact Information:</h3>
+        <div>
+            Name: <input type="text" name="name">
+        </div>
+        <div>
+            Phone Number: <input type="text" name="phone">
+        </div>
+        <div>
+            Email: <input type="text" name="email">
+        </div>
+
+        <input type="submit">
+    </form>
+
     <img src="../media/inside_babongrill.jpg" alt="Seating area inside the barbeque restaurant." width="80%">
 </div>
 {% endblock %}

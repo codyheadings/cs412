@@ -34,6 +34,28 @@ body {
     padding: 20px auto;
 }
 
+form div {
+    display: block;
+}
+
+.hidden-c {
+  display:none;
+  margin-left: 20px;
+}
+
+.hidden-b {
+  display:none;
+  margin-left: 20px;
+}
+
+.burger:checked ~ .hidden-b {
+  display:block;
+}
+
+.chicken:checked ~ .hidden-c {
+  display:block;
+}
+
 hr {
     border-color: rgb(250, 99, 99);
 }

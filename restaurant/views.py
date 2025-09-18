@@ -6,10 +6,13 @@ from django.shortcuts import render
 import random
 
 specials = [
-    "",
-    "",
-    "",
-    "",
+    "Bab's Perfect Pork Belly",
+    "Bab's Saucy Sliders",
+    "Bab's Mountain of Mystery Meat",
+    "Bab's Flamin' Ribs",
+    "Bab's Slathered Steak",
+    "Bab's Krispy Kebab",
+    "Bab's Rotisserie Roast",
 ]
 
 # Create your views here.
