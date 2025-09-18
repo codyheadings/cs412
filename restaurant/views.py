@@ -47,11 +47,35 @@ def confirmation(request):
     if request.POST:
 
         # extract form fields into variables
-        
+        special = request.POST["special"]
+        brisket = request.POST["brisket"]
+        chicken = request.POST["chicken"]
+        plain = request.POST["plain"]
+        extra_spice = request.POST["extra_spice"]
+        burger = request.POST["burger"]
+        cheddar = request.POST["cheddar"]
+        extra_patty = request.POST["extra_patty"]
+        bbq_bacon = request.POST["bbq_bacon"]
+        instructions = request.POST["instructions"]
+        name = request.POST["name"]
+        phone = request.POST["phone"]
+        email = request.POST["email"]
 
         # create context variables for use in template
         context = {
-
+            "name": name,
+            "phone": phone,
+            "email": email,
+            "instructions": instrutions,
+            "special": special,
+            "brisket": brisket,
+            "chicken": chicken,
+            "plain": plain,
+            "extra_spice": extra_spice,
+            "burger": burger,
+            "cheddar": cheddar,
+            "extra_patty": extra_patty,
+            "bbq_bacon": bbq_bacon,
         }
 
     # default: return form to fill in if not submitting
