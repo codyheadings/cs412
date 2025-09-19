@@ -4,6 +4,7 @@
 
 from django.shortcuts import render
 import random
+import time
 
 specials = [
     "Bab's Perfect Pork Belly",
@@ -47,26 +48,45 @@ def confirmation(request):
     if request.POST:
 
         # extract form fields into variables
-        special = request.POST["special"]
-        brisket = request.POST["brisket"]
-        chicken = request.POST["chicken"]
-        plain = request.POST["plain"]
-        extra_spice = request.POST["extra_spice"]
-        burger = request.POST["burger"]
-        cheddar = request.POST["cheddar"]
-        extra_patty = request.POST["extra_patty"]
-        bbq_bacon = request.POST["bbq_bacon"]
+        special = request.POST.get("special", False)
+        brisket = request.POST.get("brisket", False)
+        chicken = request.POST.get("chicken", False)
+        plain = request.POST.get("plain", False)
+        extra_spice = request.POST.get("extra_spice", False)
+        burger = request.POST.get("burger", False)
+        cheddar = request.POST.get("cheddar", False)
+        extra_patty = request.POST.get("extra_patty", False)
+        bbq_bacon = request.POST.get("bbq_bacon", False)
         instructions = request.POST["instructions"]
         name = request.POST["name"]
         phone = request.POST["phone"]
         email = request.POST["email"]
+        readytime = time.ctime(time.time() + random.randint(1800,3600))
+        price = 0
+        if(special != False):
+            price += 12.99
+        if(brisket != False):
+            price += 13.49
+        if(chicken != False):
+            price += 11.99
+        if(extra_spice != False):
+            price += 0.25
+        if(burger != False):
+            price += 10.99
+        if(extra_patty != False):
+            price += 1.99
+        if(bbq_bacon != False):
+            price += 1.49
+        if(cheddar != False):
+            price += 0.50
+
 
         # create context variables for use in template
         context = {
             "name": name,
             "phone": phone,
             "email": email,
-            "instructions": instrutions,
+            "instructions": instructions,
             "special": special,
             "brisket": brisket,
             "chicken": chicken,
@@ -76,6 +96,8 @@ def confirmation(request):
             "cheddar": cheddar,
             "extra_patty": extra_patty,
             "bbq_bacon": bbq_bacon,
+            "readytime": readytime,
+            "price": price
         }
 
     # default: return form to fill in if not submitting

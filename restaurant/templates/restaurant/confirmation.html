@@ -8,6 +8,58 @@
 <div>
     <h1>Order Confirmation</h1>
     <hr>
-    
+
+    <h3>Customer Info:</h3>
+    <p>Name: {{name}}</p>
+    <p>Email Address: {{email}}</p>
+    <p>Phone Number: {{phone}}</p>
+
+    <h3>Order Info:</h3>
+    <ul>
+        {% if special != False %}
+            <li>Daily Special</li>
+        {% endif %}
+
+        {% if brisket != False %}
+            <li>Barbeque Brisket</li>
+        {% endif %}
+
+        {% if chicken != False %}
+            <li>Spicy Fried Chicken</li>
+            <ul>
+                {% if plain != False %}
+                <li>+ Make it plain</li>
+                {% endif %}
+                {% if extra_spice != False %}
+                <li>+ Extra spice!</li>
+                {% endif %}
+            </ul>
+        {% endif %}
+
+        {% if burger != False %}
+            <li>Bab's Best Burger</li>
+            <ul>
+                {% if extra_patty != False %}
+                <li>+ Extra Patty</li>
+                {% endif %}
+                {% if cheddar != False %}
+                <li>+ Premium cheddar</li>
+                {% endif %}
+                {% if bbq_bacon != False %}
+                <li>+ BBQ Bacon</li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </ul>
+
+    <p>Price: {{price}}</p>
+
+    <h3>Special Instructions:</h3>
+    <p>{{instructions}}</p>
+
+    <br>
+    <hr>
+    <p>Thank you for ordering! Your food will be ready at: {{readytime}}</p>
+
 </div>
 {% endblock %}

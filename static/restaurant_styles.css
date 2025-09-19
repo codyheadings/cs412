@@ -18,14 +18,28 @@ h1,h2,h3,h4,h5{
 
 a, a:visited {
     color: rgb(158, 128, 124);
+    border: 2px solid rgb(250, 99, 99);
+    padding: 15px 30px;
+    text-align: center;
     text-decoration: none;
+    display: inline-block;
+    margin: auto;
+    cursor: pointer;
 }
 
 a:hover {
     color: rgb(12, 22, 31);
     text-decoration: none;
     background-color: rgb(250, 99, 99);
-    /* font-weight: bold; */
+}
+
+#order {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+li {
+    margin: 2px;
 }
 
 body {
