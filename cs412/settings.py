@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'hw', # NEW
     'formdata', #examples for week of 9/16
+    'blog', #examples for 9/25
     'quotes', #a1
     'restaurant', #a2
 ]
