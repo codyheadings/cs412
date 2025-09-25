@@ -3,10 +3,10 @@
 # desc: url pattern routes for app navigation
 
 from django.urls import path
-# from .views import ProfileView
+from .views import ProfileListView
 
 urlpatterns = [
     # path('', RandomArticleView.as_view(), name='random'),
-    # path('show_all', ShowAllView.as_view(), name='blog/show_all'),
+    path('', ProfileListView.as_view(), name='show_all_profiles'),
     # path('profile/<int:pk>', ProfileView.as_view(), name='profile'),
 ]

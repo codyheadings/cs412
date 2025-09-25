@@ -1,0 +1,27 @@
+<!-- mini_insta/templates/mini_insta/show_all_profiles.html -->
+<!-- Cody Headings, codyh@bu.edu -->
+<!-- html page for list view of all profile objects -->
+
+{% extends 'mini_insta/base.html' %}
+
+<h1>Showing all Profiles</h1>
+
+{% block content %}
+<main class="grid-container">
+    <!-- scriptlet code to display the contents of {{profiles}}-->
+    {% for p in profiles %}
+    <profile>
+        {% if p.profile_image_url %}
+        <!-- for later <a href="{\% url 'profile' p.pk \%}"> -->
+            <img src="{{p.profile_image_url}}" alt="{{p.profile_image_url}}">
+        <!--</a>-->
+        {% endif %}
+
+        <div>
+            <h2>{{p.display_name}}</h2>
+            <p>@{{p.username}}</p>
+        </div>
+    </profile>
+    {% endfor %}
+</main>
+{% endblock %}

@@ -1,0 +1,28 @@
+<!-- mini_insta/templates/mini_insta/base.html -->
+<!-- Cody Headings, codyh@bu.edu -->
+<!-- base html template with head/nav to be extended -->
+
+{% load static %}
+<html>
+    <head>
+        <title>Mini Insta</title>
+        <link rel="stylesheet" href="{% static 'styles-mini_insta.css' %}">
+    </head>
+    <body>
+        <header>
+            <h1>Mini Insta</h1>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'show_all_profiles' %}">All Profiles</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        {% block content %}
+        {% endblock %}
+        
+        <footer>
+            <p>Placeholder</p>
+        </footer>
+    </body>
+</html>
