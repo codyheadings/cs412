@@ -1,0 +1,41 @@
+<!-- mini_insta/templates/mini_insta/show_profile.html -->
+<!-- Cody Headings, codyh@bu.edu -->
+<!-- html page for singular view of profile object -->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<main class="grid-container">
+    <profile>
+        {% if profile.profile_image_url %}
+        <img src="{{profile.profile_image_url}}" alt="{{profile.profile_image_url}}">
+        {% endif %}
+
+        <div>
+            <h1>{{profile.display_name}}</h1>
+            <h2>@{{profile.username}}</h2>
+
+            <div class="grid-container-2">
+                <div>
+                    <h3>Followers:</h3>
+                    <p>1</p>
+                </div>
+                <div>
+                    <h3>Following:</h3>
+                    <p>3</p>
+                </div>
+            </div>
+            <hr>
+
+            <h3>Bio:</h3>
+            <p>{{profile.bio_text}}</p>
+            <p>Joined {{profile.join_date}}</p>
+
+            <div>
+                <h3>Posts:</h3>
+                <p>None</p>
+            </div>
+        </div>
+    </profile>
+</main>
+{% endblock %}

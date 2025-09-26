@@ -12,13 +12,15 @@
     {% for p in profiles %}
     <profile>
         {% if p.profile_image_url %}
-        <!-- for later <a href="{\% url 'profile' p.pk \%}"> -->
-            <img src="{{p.profile_image_url}}" alt="{{p.profile_image_url}}">
-        <!--</a>-->
+        <a href="{% url 'show_profile' p.pk %}">
+            <img class="thumbnail" src="{{p.profile_image_url}}" alt="{{p.profile_image_url}}">
+        </a>
         {% endif %}
 
         <div>
-            <h2>{{p.display_name}}</h2>
+            <a href="{% url 'show_profile' p.pk %}">
+                <h2>{{p.display_name}}</h2>
+            </a>
             <p>@{{p.username}}</p>
         </div>
     </profile>
