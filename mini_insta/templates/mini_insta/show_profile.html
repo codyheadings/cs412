@@ -36,7 +36,8 @@
     <div>
         <h2>Posts</h2>
         
-        {% for post in profile.get_all_posts %}
+        {% if profile.has_posts %}
+            {% for post in profile.get_all_posts %}
             <div>
                 {% if post.has_photos %}
                 <a href="{% url 'show_post' post.pk %}">
@@ -50,7 +51,10 @@
                 </a>
                 {% endif %}
             </div>
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+            <p>Nothing yet, stay tuned.</p>
+        {% endif %}
     </div>
 </main>
 {% endblock %}

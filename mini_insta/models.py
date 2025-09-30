@@ -21,9 +21,14 @@ class Profile(models.Model):
         """Return a URL to display one instance of this model."""
         return reverse('show_profile', kwargs={'pk': self.pk})
     
+    def has_posts(self):
+        """Return true if user has posts, false otherwise"""
+        posts = Post.objects.filter(profile=self)
+        return len(posts)>0
+    
     def get_all_posts(self):
         """Return a QuerySet of Posts from this user."""
-        posts = Post.objects.filter(profile=self).order_by('timestamp')
+        posts = Post.objects.filter(profile=self).order_by('-timestamp')
         return posts
     
 class Post(models.Model):
