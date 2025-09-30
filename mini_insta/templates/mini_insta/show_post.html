@@ -10,14 +10,14 @@
 
         {% for photo in post.get_all_photos %}
         <tr>
-            <a href=""><img src="{{post.get_all_photos.0.image_url}}" 
-                alt="{{post.get_all_photos.0.image_url}}"></a>
+            <img src="{{post.get_all_photos.0.image_url}}" 
+                alt="{{post.get_all_photos.0.image_url}}">
         </tr>
         {% endfor %}
         
         {% else %}
         <tr>
-            <a href=""><img src="../media/NoImage.png" alt="No Image"></a>
+            <img src="../media/NoImage.png" alt="No Image">
         </tr>
         {% endif %}
     </div>
