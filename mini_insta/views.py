@@ -3,7 +3,7 @@
 # desc: view functions to return html renders
 
 from django.shortcuts import render
-from .models import Profile
+from .models import Post, Profile
 from django.views.generic import ListView, DetailView
 import random
 
@@ -21,3 +21,10 @@ class ProfileDetailView(DetailView):
     model = Profile
     template_name = 'mini_insta/show_profile.html'
     context_object_name = 'profile'
+
+class PostDetailView(DetailView):
+    """Subclass of DetailView to display a single post page."""
+    
+    model = Post
+    template_name = 'mini_insta/show_post.html'
+    context_object_name = 'post'

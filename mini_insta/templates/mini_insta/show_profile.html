@@ -30,12 +30,22 @@
             <h3>Bio:</h3>
             <p>{{profile.bio_text}}</p>
             <p>Joined {{profile.join_date}}</p>
-
-            <div>
-                <h3>Posts:</h3>
-                <p>None</p>
-            </div>
         </div>
     </profile>
+
+    <div>
+        <h2>Posts</h2>
+        
+        {% for post in profile.get_all_posts %}
+            <div>
+                {% if post.has_photos %}
+                <a href="{% url 'show_post' post.pk %}"><img src="{{post.get_all_photos.0.image_url}}" 
+                    alt="{{post.get_all_photos.0.image_url}}"></a>
+                {% else %}
+                <a href="{% url 'show_post' post.pk %}"><img src="../media/NoImage.png" alt="No Image"></a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
 </main>
 {% endblock %}

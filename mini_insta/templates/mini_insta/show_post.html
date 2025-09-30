@@ -1,0 +1,30 @@
+<!-- mini_insta/templates/mini_insta/show_post.html -->
+<!-- Cody Headings, codyh@bu.edu 9/30/25 -->
+<!-- html page for singular view of post object -->
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<table>
+    <div>
+        {% if post.has_photos %}
+
+        {% for photo in post.get_all_photos %}
+        <tr>
+            <a href=""><img src="{{post.get_all_photos.0.image_url}}" 
+                alt="{{post.get_all_photos.0.image_url}}"></a>
+        </tr>
+        {% endfor %}
+        
+        {% else %}
+        <tr>
+            <a href=""><img src="../media/NoImage.png" alt="No Image"></a>
+        </tr>
+        {% endif %}
+    </div>
+
+    <tr>
+        <p>{{post.caption}}</p>
+        <p>{{post.timestamp}}</p>
+    </tr>
+</table>
+{% endblock %}
