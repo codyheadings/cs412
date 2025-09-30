@@ -47,6 +47,14 @@ footer {
     padding: 15px;
 }
 
+.container {
+    background: #eee;
+    max-width: 900px;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 15px;
+}
+
 .grid-container-2 {
     background: #eee;
     max-width: 900px;
@@ -55,6 +63,16 @@ footer {
     grid-gap: 15px;
     max-width: 1200px;
     margin: 5px auto;
+}
+
+.postpic {
+    width: 500px;
+    padding: 7px;
+}
+
+.post-thumbnail {
+    width: 250px;
+    padding: 3px;
 }
 
 profile.featured {

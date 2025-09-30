@@ -4,26 +4,31 @@
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
+<main class="container">
 <table>
     <div>
         {% if post.has_photos %}
 
         {% for photo in post.get_all_photos %}
         <tr>
-            <img src="{{photo.image_url}}" alt="{{photo.image_url}}">
+            <img src="{{photo.image_url}}" alt="{{photo.image_url}}" 
+            class="postpic">
         </tr>
         {% endfor %}
         
         {% else %}
         <tr>
-            <img src="../media/NoImage.png" alt="No Image">
+            <img src="../media/NoImage.png" alt="No Image" class="postpic">
         </tr>
         {% endif %}
     </div>
 
     <tr>
         <p>{{post.caption}}</p>
-        <p>{{post.timestamp}}</p>
+        <hr>
+        <p>Posted by {{post.profile}} on {{post.timestamp}}</p>
+        <a href="{{ post.profile.get_absolute_url}}">View this user's other posts</a>
     </tr>
 </table>
+</main>
 {% endblock %}

@@ -19,7 +19,7 @@ class Profile(models.Model):
     
     def get_absolute_url(self):
         """Return a URL to display one instance of this model."""
-        return reverse('profile', kwargs={'pk': self.pk})
+        return reverse('show_profile', kwargs={'pk': self.pk})
     
     def get_all_posts(self):
         """Return a QuerySet of Posts from this user."""

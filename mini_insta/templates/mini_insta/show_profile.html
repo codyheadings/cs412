@@ -39,10 +39,15 @@
         {% for post in profile.get_all_posts %}
             <div>
                 {% if post.has_photos %}
-                <a href="{% url 'show_post' post.pk %}"><img src="{{post.get_all_photos.0.image_url}}" 
-                    alt="{{post.get_all_photos.0.image_url}}"></a>
+                <a href="{% url 'show_post' post.pk %}">
+                    <img src="{{post.get_all_photos.0.image_url}}" 
+                    alt="{{post.get_all_photos.0.image_url}}" class="post-thumbnail">
+                </a>
                 {% else %}
-                <a href="{% url 'show_post' post.pk %}"><img src="../media/NoImage.png" alt="No Image"></a>
+                <a href="{% url 'show_post' post.pk %}">
+                    <img src="../media/NoImage.png" alt="No Image" 
+                    class="post-thumbnail">
+                </a>
                 {% endif %}
             </div>
         {% endfor %}
