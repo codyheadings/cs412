@@ -10,8 +10,7 @@
 
         {% for photo in post.get_all_photos %}
         <tr>
-            <img src="{{post.get_all_photos.0.image_url}}" 
-                alt="{{post.get_all_photos.0.image_url}}">
+            <img src="{{photo.image_url}}" alt="{{photo.image_url}}">
         </tr>
         {% endfor %}
         
