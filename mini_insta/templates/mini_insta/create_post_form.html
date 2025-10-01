@@ -1,0 +1,22 @@
+<!-- mini_insta/templates/mini_insta/create_post_form.html -->
+<!-- Cody Headings, codyh@bu.edu, 9/30/25 -->
+<!-- html page dedicated to creating new posts for a user -->
+ {% extends 'mini_insta/base.html' %}
+{% block content %}
+
+<h1>Create a new Post</h1>
+<!-- display the HTML form -->
+ <form action="{% url 'create_post' profile.pk %}" method="POST">
+    {% csrf_token %}
+    <table>
+        {{form.as_table}}
+        <tr>
+            <label>Image URL: <input type="text" name="image_url"></label>
+        </tr>
+    </table>
+
+    <input type="submit" name="submit" value="Submit">
+    <a href="">Cancel</a> <!-- TODO: return to previous page -->
+</form>
+
+{% endblock %}
