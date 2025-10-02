@@ -22,7 +22,12 @@
         {% endblock %}
         
         <footer>
-            <p><a href="{% url 'show_all_profiles' %}">Return to all Profiles</a></p>
+            <div  class="footer-wrapper">
+                <p><a href="{% url 'show_all_profiles' %}">Return to all Profiles</a></p>
+                {% if profile %}
+                <p><a href="{% url 'create_post' profile.pk%}">Create a Post</a></p>
+                {% endif %}
+            </div>
         </footer>
     </body>
 </html>

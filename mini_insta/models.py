@@ -40,6 +40,10 @@ class Post(models.Model):
         '''Return a string representation of this Profile object.'''
         return f'Post by {self.profile} at {self.timestamp}'
     
+    def get_absolute_url(self):
+        """Return a URL to display one instance of this model."""
+        return reverse('show_post', kwargs={'pk': self.pk})
+    
     def has_photos(self):
         """Return true if post has photos, false otherwise"""
         photos = Photo.objects.filter(post=self)

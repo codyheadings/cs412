@@ -31,8 +31,7 @@ class PostDetailView(DetailView):
     context_object_name = 'post'
 
 class CreatePostView(CreateView):
-    '''A view to create a new comment and save it to the database.'''
- 
+    '''A view to create a new post and save it to the database.'''
  
     form_class = CreatePostForm
     template_name = "mini_insta/create_post_form.html"
