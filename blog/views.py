@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import Article
-from django.views.generic import ListView, DetailView, CreateView
-from .forms import CreateArticleForm, CreateCommentForm
+from .models import *
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .forms import CreateArticleForm, CreateCommentForm, UpdateArticleForm
 from django.urls import reverse
 import random
 
@@ -42,6 +42,13 @@ class CreateArticleView(CreateView):
 
     form_class = CreateArticleForm
     template_name = "blog/create_article_form.html"
+
+    def form_valid(self, form):
+        '''Handle the form submission to create a new Article object.'''
+        print(f'CreateArticleView: form.cleaned_data={form.cleaned_data}')
+
+		# delegate work to the superclass version of this method
+        return super().form_valid(form)
 
 class CreateCommentView(CreateView):
     '''A view to create a new comment and save it to the database.'''
@@ -105,3 +112,30 @@ class CreateCommentView(CreateView):
         pk = self.kwargs['pk']
         # call reverse to generate the URL for this Article
         return reverse('article', kwargs={'pk':pk})
+    
+class UpdateArticleView(UpdateView):
+    """View class to handle update of an article based on its pk."""
+
+    model = Article
+    form_class = UpdateArticleForm
+    template_name = "blog/update_article_form.html"
+
+class DeleteCommentView(DeleteView):
+    '''A view to delete a comment and remove it from the database.'''
+ 
+    template_name = "blog/delete_comment_form.html"
+    model = Comment
+    context_object_name = 'comment'
+
+    def get_success_url(self):
+        """Return url to redirect to after delete."""
+
+         # get the pk for this comment
+        pk = self.kwargs.get('pk')
+        comment = Comment.objects.get(pk=pk)
+        
+        # find the article to which this Comment is related by FK
+        article = comment.article
+        
+        # reverse to show the article page
+        return reverse('article', kwargs={'pk':article.pk})
