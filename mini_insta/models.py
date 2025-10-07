@@ -58,7 +58,23 @@ class Photo(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
     image_url = models.URLField(blank=True)
+    image_file = models.ImageField(blank=True)
 
     def __str__(self):
         '''Return a string representation of this Profile object.'''
-        return f'Photo from {self.post}'
+        if self.image_url != "":
+            ptype = "URL"
+        else:
+            ptype = "file"
+        
+        val = "Photo " + ptype + f" from {self.post}"
+
+        return val
+    
+    def get_image_url(self):
+        """Returns the url to the image object."""
+        if self.image_url != "":
+            return self.image_url
+        else:
+            return self.image_file.url
+            

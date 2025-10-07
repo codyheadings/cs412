@@ -41,8 +41,8 @@
             <div>
                 {% if post.has_photos %}
                 <a href="{% url 'show_post' post.pk %}">
-                    <img src="{{post.get_all_photos.0.image_url}}" 
-                    alt="{{post.get_all_photos.0.image_url}}" class="post-thumbnail">
+                    <img src="{{post.get_all_photos.0.get_image_url}}" 
+                    alt="{{post.get_all_photos.0.get_image_url}}" class="post-thumbnail">
                 </a>
                 {% else %}
                 <a href="{% url 'show_post' post.pk %}">

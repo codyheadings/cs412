@@ -9,6 +9,6 @@ class CreatePostForm(forms.ModelForm):
     """A form to add a new Post to the database."""
 
     class Meta:
-        """Associaate this form with a model from the database"""
+        """Associate this form with a model from the database"""
         model=Post
         fields = ["caption"]

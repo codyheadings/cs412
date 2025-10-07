@@ -8,13 +8,19 @@
     <div>
         <h1>Create a new Post</h1>
         <!-- display the HTML form -->
-        <form action="{% url 'create_post' profile.pk %}" method="POST">
+        <form action="{% url 'create_post' profile.pk %}" method="POST" 
+        enctype="multipart/form-data">
             {% csrf_token %}
             <table>
                 {{form.as_table}}
-                <tr>
+                <!-- <tr>
                     <label>
                         Image URL: <input type="text" name="image_url">
+                    </label>
+                </tr> -->
+                <tr>
+                    <label>
+                        Image Upload: <input type="file" name="image_file" multiple>
                     </label>
                 </tr>
             </table>

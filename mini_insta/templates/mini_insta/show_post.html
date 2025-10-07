@@ -11,7 +11,7 @@
 
         {% for photo in post.get_all_photos %}
         <tr>
-            <img src="{{photo.image_url}}" alt="{{photo.image_url}}" 
+            <img src="{{photo.get_image_url}}" alt="{{photo.get_image_url}}" 
             class="postpic">
         </tr>
         {% endfor %}
