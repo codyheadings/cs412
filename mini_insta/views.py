@@ -3,9 +3,9 @@
 # desc: view functions to return html renders
 
 from django.shortcuts import render
-from mini_insta.forms import CreatePostForm
+from mini_insta.forms import CreatePostForm, UpdateProfileForm
 from .models import *
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 import random
 
 # Create your views here.
@@ -82,3 +82,10 @@ class CreatePostView(CreateView):
     def get_success_url(self):
         """Redirects to new post page after successful creation."""
         return reverse('show_post', kwargs={'pk':self.object.pk})
+    
+class UpdateProfileView(UpdateView):
+    """View class to handle update of an article based on its pk."""
+
+    model = Profile
+    form_class = UpdateProfileForm
+    template_name = "mini_insta/update_profile_form.html"

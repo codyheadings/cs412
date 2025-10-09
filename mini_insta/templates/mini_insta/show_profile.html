@@ -31,6 +31,9 @@
             <p>{{profile.bio_text}}</p>
             <p>Joined {{profile.join_date}}</p>
         </div>
+        <div>
+            <a href="{% url 'update_profile' profile.pk %}">Update Profile</a>
+        </div>
     </profile>
 
     <div>

@@ -1,0 +1,30 @@
+<!-- mini_insta/templates/mini_insta/update_profile_form.html -->
+<!-- Cody Headings, codyh@bu.edu 10/09/2025 -->
+<!-- html page form for updatign a user's profile -->
+{% extends 'mini_insta/base.html' %}
+ 
+{% block content %}
+<h2>Update Profile</h2>
+
+<form method = 'POST' enctype="multipart/form-data">
+
+{% csrf_token %}
+    <table>
+    {% for field in form %}
+    <tr>
+        <th>{{field.name}}</th>
+        <td>{{field}}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td>
+            <input type='submit' name = 'update_profile' value= 'Update Profile!'>
+        </td>
+    </tr>
+    </table>
+</form>
+<form action="{% url 'show_profile' profile.pk %}" method="GET">
+    <input type='submit' value= 'Cancel'>
+</form>
+
+{% endblock %}
