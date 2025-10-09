@@ -67,9 +67,18 @@ class CreatePostView(CreateView):
         # attach this profile to the post
         form.instance.profile = profile # set the FK
 
-        image_url = self.request.POST.get("image_url")  # grab URL from form
-        if image_url:
-            Photo.objects.create(post=form.instance, image_url=image_url)
+        # image_url = self.request.POST.get("image_url")  # grab URL from form
+        # if image_url:
+        #     Photo.objects.create(post=form.instance, image_url=image_url)
+
+        self.object = form.save()
+        files = self.request.FILES.getlist('image_file')
+        for f in files:
+            Photo.objects.create(post=form.instance, image_file=f)
  
         # delegate the work to the superclass method form_valid:
         return super().form_valid(form)
+    
+    def get_success_url(self):
+        """Redirects to new post page after successful creation."""
+        return reverse('show_post', kwargs={'pk':self.object.pk})
