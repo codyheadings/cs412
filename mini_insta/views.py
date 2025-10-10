@@ -3,9 +3,9 @@
 # desc: view functions to return html renders
 
 from django.shortcuts import render
-from mini_insta.forms import CreatePostForm, UpdateProfileForm
+from mini_insta.forms import *
 from .models import *
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 import random
 
 # Create your views here.
@@ -22,6 +22,15 @@ class ProfileDetailView(DetailView):
     model = Profile
     template_name = 'mini_insta/show_profile.html'
     context_object_name = 'profile'
+
+    def get_context_data(self, **kwargs):
+        """Add context variables to view."""
+        context = super().get_context_data(**kwargs)
+        profile = self.object
+
+        context['post_count'] = Post.objects.filter(profile=profile).count()
+
+        return context
 
 class PostDetailView(DetailView):
     """Subclass of DetailView to display a single post page."""
@@ -46,8 +55,7 @@ class CreatePostView(CreateView):
         pk = self.kwargs['pk']
         profile = Profile.objects.get(pk=pk)
  
- 
-        # add this article into the context dictionary:
+        # add this profile into the context dictionary:
         context['profile'] = profile
         return context
  
@@ -84,8 +92,49 @@ class CreatePostView(CreateView):
         return reverse('show_post', kwargs={'pk':self.object.pk})
     
 class UpdateProfileView(UpdateView):
-    """View class to handle update of an article based on its pk."""
+    """View class to handle update of a profile based on its pk."""
 
     model = Profile
     form_class = UpdateProfileForm
     template_name = "mini_insta/update_profile_form.html"
+
+class UpdatePostView(UpdateView):
+    """View class to handle update of a post based on its pk."""
+
+    model = Post
+    form_class = UpdatePostForm
+    template_name = "mini_insta/update_post_form.html"
+
+class DeletePostView(DeleteView):
+    '''A view to delete a Post and remove it from the database.'''
+ 
+    template_name = "mini_insta/delete_post_form.html"
+    model = Post
+    context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        """Provides context data to the delet post form."""
+
+        # calling the superclass method
+        context = super().get_context_data(**kwargs)
+        # get current post object
+        post = self.object
+        profile = post.profile
+ 
+        # add this profile into the context dictionary:
+        context['profile'] = profile
+        context['post'] = post
+        return context
+
+    def get_success_url(self):
+        """Return url to redirect to after delete."""
+
+        # get the pk for this post
+        pk = self.kwargs.get('pk')
+        post = Post.objects.get(pk=pk)
+        
+        # find the profile to which this Post is related by FK
+        profile = post.profile
+        
+        # reverse to show the profile page
+        return reverse('show_profile', kwargs={'pk':profile.pk})

@@ -1,9 +1,11 @@
-<!-- mini_insta/templates/mini_insta/show_post.html -->
-<!-- Cody Headings, codyh@bu.edu 9/30/25 -->
-<!-- html page for singular view of post object -->
+<!-- mini_insta/templates/mini_insta/delete_profile_form.html -->
+<!-- Cody Headings, codyh@bu.edu 10/10/2025 -->
+<!-- html page form for deleting a post object -->
 {% extends 'mini_insta/base.html' %}
-
+ 
 {% block content %}
+<h3 class="center">Are you sure you want to delete this post?</h3>
+ 
 <main class="container">
 <table>
     <div>
@@ -30,13 +32,19 @@
         <p>Posted by {{post.profile}} on {{post.timestamp}}</p>
     </tr>
 </table>
-<!-- link to delete this post -->
-<a class="button" href="{% url 'delete_post' post.pk %}">Delete Post</a>
-<!-- link to update this post -->
-<a class="button" href="{% url 'update_post' post.pk %}">Update Post</a>
-<br><br>
-<a class="button" href="{{ post.profile.get_absolute_url}}">
-            View this user's posts
-        </a>
 </main>
+
+<!-- Form to delete post -->
+<form class="center" method='POST'>
+    {% csrf_token %}
+    <input class="button" type='submit' value="Delete">
+</form>
+
+<!-- form to cancel delete request -->
+<form class="center" action="{% url 'show_post' post.pk %}" 
+method='GET'>
+    {% csrf_token %}
+    <input class="button" type='submit' value="Cancel">
+</form>
+
 {% endblock %}

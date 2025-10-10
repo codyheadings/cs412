@@ -7,24 +7,32 @@
 <h2>Update Profile</h2>
 
 <form method = 'POST' enctype="multipart/form-data">
-
 {% csrf_token %}
+
     <table>
-    {% for field in form %}
     <tr>
-        <th>{{field.name}}</th>
-        <td>{{field}}</td>
+        <th>Display Name:</th>
+        <td>{{form.display_name}}</td>
     </tr>
-    {% endfor %}
+    <tr>
+        <th>Bio Text:</th>
+        <td>{{form.bio_text}}</td>
+    </tr>
+    <tr>
+        <th>Profile Image URL:</th>
+        <td>{{form.profile_image_url}}</td>
+    </tr>
     <tr>
         <td>
-            <input type='submit' name = 'update_profile' value= 'Update Profile!'>
+            <input class="button" type='submit' name ='update_profile' 
+            value='Update Profile'>
         </td>
     </tr>
     </table>
 </form>
+
 <form action="{% url 'show_profile' profile.pk %}" method="GET">
-    <input type='submit' value= 'Cancel'>
+    <input class="button" type='submit' value='Cancel'>
 </form>
 
 {% endblock %}

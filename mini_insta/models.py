@@ -35,7 +35,7 @@ class Profile(models.Model):
 class Post(models.Model):
     """Model that represents a single post for a user."""
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
     caption = models.TextField(blank=True)
 
     def __str__(self):
@@ -59,7 +59,7 @@ class Post(models.Model):
 class Photo(models.Model):
     """Model that represents an image attached to a user's post."""
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
     image_url = models.URLField(blank=True)
     image_file = models.ImageField(blank=True)
 

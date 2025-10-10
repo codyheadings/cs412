@@ -1,0 +1,30 @@
+<!-- mini_insta/templates/mini_insta/update_post_form.html -->
+<!-- Cody Headings, codyh@bu.edu 10/10/2025 -->
+<!-- html page form for updating a post -->
+{% extends 'mini_insta/base.html' %}
+ 
+{% block content %}
+<h2>Update Post</h2>
+
+<form method = 'POST' enctype="multipart/form-data">
+{% csrf_token %}
+
+    <table>
+    <tr>
+        <th>Caption:</th>
+        <td>{{form.caption}}</td>
+    </tr>
+    <tr>
+        <td>
+            <input class="button" type='submit' name ='update_post' 
+            value='Update Post'>
+        </td>
+    </tr>
+    </table>
+</form>
+
+<form action="{% url 'show_post' post.pk %}" method="GET">
+    <input class="button" type='submit' value='Cancel'>
+</form>
+
+{% endblock %}

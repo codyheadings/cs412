@@ -8,7 +8,8 @@
 <main class="grid-container">
     <profile>
         {% if profile.profile_image_url %}
-        <img src="{{profile.profile_image_url}}" alt="{{profile.profile_image_url}}">
+        <img src="{{profile.profile_image_url}}" 
+        alt="{{profile.profile_image_url}}">
         {% endif %}
 
         <div>
@@ -16,6 +17,10 @@
             <h2>@{{profile.username}}</h2>
 
             <div class="grid-container-2">
+                <div>
+                    <h3>Posts:</h3>
+                    <p>{{post_count}}</p>
+                </div>
                 <div>
                     <h3>Followers:</h3>
                     <p>1</p>
@@ -32,32 +37,31 @@
             <p>Joined {{profile.join_date}}</p>
         </div>
         <div>
-            <a href="{% url 'update_profile' profile.pk %}">Update Profile</a>
+            <a class="button" href="{% url 'update_profile' profile.pk %}">
+                Update Profile</a>
         </div>
     </profile>
 
-    <div>
+    <div class="profile-posts">
         <h2>Posts</h2>
         
-        {% if profile.has_posts %}
-            {% for post in profile.get_all_posts %}
-            <div>
-                {% if post.has_photos %}
-                <a href="{% url 'show_post' post.pk %}">
-                    <img src="{{post.get_all_photos.0.get_image_url}}" 
-                    alt="{{post.get_all_photos.0.get_image_url}}" class="post-thumbnail">
-                </a>
-                {% else %}
-                <a href="{% url 'show_post' post.pk %}">
-                    <img src="https://cs-webapps.bu.edu/codyh/media/NoImage.png" alt="No Image" 
-                    class="post-thumbnail">
-                </a>
-                {% endif %}
-            </div>
-            {% endfor %}
-        {% else %}
-            <p>Nothing yet, stay tuned.</p>
-        {% endif %}
+        <div class="grid-container">
+            {% if profile.has_posts %}
+                {% for post in profile.get_all_posts %}
+                    <a href="{% url 'show_post' post.pk %}">
+                    {% if post.has_photos %}
+                        <img src="{{post.get_all_photos.0.get_image_url}}" alt=""
+                        class="post-thumbnail">
+                    {% else %}
+                        <img src="https://cs-webapps.bu.edu/codyh/media/NoImage.png" 
+                        alt="No Image" class="post-thumbnail">
+                    {% endif %}
+                    </a>
+                {% endfor %}
+            {% else %}
+                <p>Nothing yet, stay tuned.</p>
+            {% endif %}
+        </div>
     </div>
 </main>
 {% endblock %}
