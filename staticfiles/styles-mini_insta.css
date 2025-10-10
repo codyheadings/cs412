@@ -1,9 +1,8 @@
-/* This CSS was derived from NetNinja's multi-column grid example. */
-
 body {
     margin: 30px;
-    background: #d1dedd;
+    background-color: #f8fafc;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-bottom: 60px;
 }
 
 ul, li {
@@ -26,43 +25,91 @@ p {
 header {
     max-width: 1200px;
     margin: 40px auto;
-    border-bottom: 1px solid #bbc7c7;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 footer {
-    position: fixed;
-    bottom: 0px;
-    text-align: center;
-    padding: 4px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+  border-top: 1px solid #e2e8f0;
+  padding: 0.35rem;
+}
+
+.container,
+.grid-container {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 1rem;
 }
 
 .grid-container {
-    background: #eee;
-    max-width: 900px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 25px;
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
 }
 
-.container {
-    background: #eee;
-    max-width: 900px;
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 15px;
+.post-thumbnail {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.post-thumbnail:hover {
+  transform: scale(1.015);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+profile {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  padding: 20px;
+  gap: 20px;
+  grid-column: span 3;
+}
+
+profile img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  padding-right: 10px;
+}
+
+profile h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+profile h2 {
+  font-size: 1.1rem;
+  color: #648b75;
+  margin: 4px 0 12px 0;
 }
 
 .grid-container-2 {
-    background: #eee;
-    max-width: 900px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 15px;
-    max-width: 1200px;
-    margin: 5px auto;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.grid-container-2 div h3 {
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+  color: #648b75;
+}
+
+.grid-container-2 p {
+  font-weight: 600;
 }
 
 .footer-wrapper {
@@ -71,20 +118,47 @@ footer {
 }
 
 .footer-wrapper p {
-    padding: 5px;
-    border: black solid 1px;
-    background-color:  #eee;
-    border-radius: 5%;
     margin-right: 15px;
 }
 
-.cancel {
-    padding: 5px;
-    border: black solid 1px;
-    background-color:  #eee;
-    border-radius: 7%;
-    margin-right: 15px;
-    font-size: small;
+td {
+    padding-top: 5px;
+}
+
+.postpic,
+.postpic-noimage {
+  width: 100%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.center {
+    text-align: center;
+}
+
+.button {
+    display: inline-block;
+    padding: 0.6em 1.2em;
+    border-radius: 8px;
+    background-color: #2ec572;
+    color: white;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: background-color 0.25s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 6px rgba(37, 235, 159, 0.25);
+}
+
+.button:hover,
+.button:focus {
+  background-color: #25a55f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 235, 159, 0.25);
+}
+
+.button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(37, 235, 159, 0.25);
 }
 
 .postpic {
@@ -102,23 +176,6 @@ footer {
     padding: 3px;
 }
 
-profile.featured {
-    grid-column: span 3;
-    display: grid; /* nested grid */
-    gap: 60px;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    border-bottom: 1px #bbc7c7;
-    padding-bottom: 40px;
-}
-
-profile img, profile.featured img {
-    width: 250px;
-    height: 250px;
-    clip-path: circle(50%);
-    object-fit: cover;
-}
-
 .thumbnail {
     width: 150px;
     height: 150px;
@@ -130,22 +187,14 @@ nav li {
     display: inline;
 }
 /* responsive styles: adapt to smaller screen sizes */
-@media screen and (max-width: 980px) {
-
-    profile {
-        grid-column: span 3;
-        display: grid; /* nested grid */
-        grid-template-columns: 1fr 1fr;
-        gap: 60px;
-        align-items: center;
-    }
-}
-
 @media screen and (max-width: 760px) {
+    profile {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
 
-    profile, profile.featured {
-        
-        display: block; 
-        margin: 0px 20px;
+    profile img {
+        margin-bottom: 1rem;
     }
 }
