@@ -79,10 +79,11 @@ profile {
 }
 
 profile img {
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
+  padding-right: 10px;
 }
 
 profile h1 {
@@ -173,23 +174,6 @@ td {
 .post-thumbnail {
     width: 100%;
     padding: 3px;
-}
-
-profile.featured {
-    grid-column: span 3;
-    display: grid; /* nested grid */
-    gap: 60px;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    border-bottom: 1px #bbc7c7;
-    padding-bottom: 40px;
-}
-
-profile img, profile.featured img {
-    width: 250px;
-    height: 250px;
-    clip-path: circle(50%);
-    object-fit: cover;
 }
 
 .thumbnail {
