@@ -6,12 +6,12 @@
 
 {% block content %}
 <main class="feed-container">
-    <h1>{{profile}}'s Feed</h1>
+    <h1 class="center">{{profile}}'s Feed</h1>
 
     {% if posts %}
         {% for post in posts %}
         <article class="feed-post">
-            <header class="feed-header">
+            <div class="feed-header">
                 <a href="{% url 'show_profile' profile.pk %}">
                     {% if post.profile.profile_image_url %}
                         <img src="{{ post.profile.profile_image_url }}" 
@@ -29,7 +29,7 @@
                     </a>
                     <span class="timestamp">{{post.timestamp}}</span>
                 </div>
-            </header>
+            </div>
 
             {% if post.has_photos %}
                 <div class="feed-photo">

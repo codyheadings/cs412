@@ -6,7 +6,7 @@ from django.shortcuts import render
 from mini_insta.forms import *
 from .models import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-import random
+from django.db.models import Q
 
 # Create your views here.
 class ProfileListView(ListView):
@@ -165,4 +165,45 @@ class PostFeedListView(ListView):
         profile = Profile.objects.get(pk=pk)
 
         context['profile'] = profile
+        return context
+    
+class SearchView(ListView):
+    """Subclass of ListView to display Post and Profile search results."""
+    
+    template_name = 'mini_insta/search_results.html'
+    context_object_name = 'posts'
+
+    def dispatch(self, request, *args, **kwargs):
+        """Method called to handle any request."""
+        # get search query and profile and store in object
+        self.query = self.query = self.request.GET.get('query')
+        self.profile = Profile.objects.get(pk=self.kwargs['pk'])
+        
+        if(not self.query):
+            return render(request, 'mini_insta/search.html', {'profile': self.profile})
+        else:
+            return super().dispatch(request, *args, **kwargs)
+        
+    def get_queryset(self):
+        if not self.query:
+            return Post.objects.none()
+        return Post.objects.filter(caption__icontains=self.query).order_by('-timestamp')
+    
+    def get_context_data(self, **kwargs):
+        """Add profile, query, and search results to context data."""
+        context = super().get_context_data(**kwargs)
+        context['profile'] = self.profile
+        context['query'] = self.query
+
+        # If there is a search query, use OR logic to filter results
+        if self.query:
+            matches = Profile.objects.filter(
+                Q(username__icontains=self.query) 
+                | Q(display_name__icontains=self.query) 
+                | Q(bio_text__icontains=self.query)
+            )
+        else:
+            matches = Profile.objects.none()
+
+        context['matches'] = matches
         return context
