@@ -183,6 +183,100 @@ td {
     clip-path: circle(50%);
 }
 
+.likes {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1f372a;
+  margin-bottom: 8px;
+}
+
+a {
+  color: #25a55f
+}
+
+.feed-container {
+    max-width: 700px;
+    margin: 20px auto;
+    background: #fafafa;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.feed-post {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.feed-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.feed-profile-pic {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.feed-user-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    text-align: left;
+}
+
+.username {
+    font-weight: 600;
+    color: #333;
+    text-decoration: none;
+}
+
+.timestamp {
+    font-size: 0.8em;
+    color: #777;
+}
+
+.feed-photo {
+    margin-top: 10px;
+}
+
+.feed-photo {
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.feed-caption {
+    margin-top: 12px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #333;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.search-box {
+    flex-grow: 1;
+    max-width: 400px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+
 nav li {
     display: inline;
 }
