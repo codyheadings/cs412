@@ -1,0 +1,75 @@
+<!-- mini_insta/templates/mini_insta/show_feed.html -->
+<!-- Cody Headings, codyh@bu.edu 10/17/25 -->
+<!-- html page for list view of post feed for a profile -->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<main class="feed-container">
+    <h1>{{profile}}'s Feed</h1>
+
+    {% if posts %}
+        {% for post in posts %}
+        <article class="feed-post">
+            <header class="feed-header">
+                <a href="{% url 'show_profile' profile.pk %}">
+                    {% if post.profile.profile_image_url %}
+                        <img src="{{ post.profile.profile_image_url }}" 
+                        alt="{{ post.profile.username }}" 
+                        class="feed-profile-pic">
+                    {% else %}
+                        <img src="https://cs-webapps.bu.edu/codyh/media/NoImage.png" 
+                        alt="No Profile Image" 
+                        class="feed-profile-pic">
+                    {% endif %}
+                </a>
+                <div class="feed-user-info">
+                    <a href="{% url 'show_profile' profile.pk %}" class="username">
+                        {{post.profile}}
+                    </a>
+                    <span class="timestamp">{{post.timestamp}}</span>
+                </div>
+            </header>
+
+            {% if post.has_photos %}
+                <div class="feed-photo">
+                    <a href="{% url 'show_post' post.pk %}">
+                        <img src="{{post.get_all_photos.0.get_image_url}}" alt=""
+                        class="feed-photo">
+                    </a>
+                </div>
+            {% else %}
+                <div class="feed-photo">
+                    <a href="{% url 'show_post' post.pk %}">
+                        <img src="https://cs-webapps.bu.edu/codyh/media/NoImage.png" 
+                        alt="No Image" class="feed-photo">
+                    </a>
+                </div>
+            {% endif %}
+
+            <div class="feed-caption">
+                <p class="likes">{{post.display_likes}}</p>
+                <strong>{{post.caption}}</strong>
+                <hr>
+            </div>
+            {% for comment in post.get_all_comments %}
+            <div>
+                <p>
+                    <a href="{% url 'show_profile' comment.profile.pk %}">
+                        {{comment.profile}}
+                    </a>
+                    | <span class="timestamp">{{comment.timestamp}}</span>
+                </p>
+                <p>
+                    {{comment.text}}
+                    <br>
+                </p>
+            </div>
+    {% endfor %}
+        </article>
+        {% endfor %}
+    {% else %}
+        <p>No posts in your feed yet, follow some profiles to get started!</p>
+    {% endif %}
+</main>
+{% endblock %}

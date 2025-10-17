@@ -57,6 +57,16 @@ class Profile(models.Model):
         numfollowing = len(Follow.objects.filter(follower_profile=self))
         return numfollowing
     
+    def get_post_feed(self):
+        """Returns a list of posts personalized for the profile."""
+        posts = []
+        followed_profiles = self.get_following()
+        for profile in followed_profiles:
+            posts += profile.get_all_posts()
+
+        posts.sort(key=lambda post: post.timestamp, reverse=True)
+        return posts
+    
 class Post(models.Model):
     """Model that represents a single post for a user."""
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
