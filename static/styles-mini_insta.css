@@ -183,6 +183,18 @@ td {
     clip-path: circle(50%);
 }
 
+.likes {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1f372a;
+  margin-bottom: 8px;
+}
+
+a {
+  color: #25a55f
+}
+
+
 nav li {
     display: inline;
 }

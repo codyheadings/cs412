@@ -25,6 +25,9 @@
     </div>
 
     <tr>
+        <p class="likes">{{post.display_likes}}</p>
+    </tr>
+    <tr>
         <p>{{post.caption}}</p>
         <hr>
         <p>Posted by {{post.profile}} on {{post.timestamp}}</p>
@@ -39,4 +42,23 @@
             View this user's posts
         </a>
 </main>
+
+<div>
+    <div>
+        <h2>Comments</h2>
+    </div>
+    <!-- <h3><a href="{% url 'create_comment' post.pk %}">Create a comment</a></h3> -->
+    {% for comment in post.get_all_comments %}
+        <div>
+            <strong><a href="{% url 'show_profile' comment.profile.pk %}">{{comment.profile}}</a> | {{comment.timestamp}}</strong>
+            <p>
+                {{comment.text}}
+                <br>
+                <!-- link to delete this comment -->
+                <!-- <a href="{% url 'delete_comment' comment.pk %}">Delete</a> -->
+            </p>
+        </div>
+    {% endfor %}
+</div>
+
 {% endblock %}

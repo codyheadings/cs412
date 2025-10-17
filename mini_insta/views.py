@@ -23,15 +23,6 @@ class ProfileDetailView(DetailView):
     template_name = 'mini_insta/show_profile.html'
     context_object_name = 'profile'
 
-    def get_context_data(self, **kwargs):
-        """Add context variables to view."""
-        context = super().get_context_data(**kwargs)
-        profile = self.object
-
-        context['post_count'] = Post.objects.filter(profile=profile).count()
-
-        return context
-
 class PostDetailView(DetailView):
     """Subclass of DetailView to display a single post page."""
     
@@ -138,3 +129,17 @@ class DeletePostView(DeleteView):
         
         # reverse to show the profile page
         return reverse('show_profile', kwargs={'pk':profile.pk})
+    
+class ShowFollowersDetailView(DetailView):
+    """Subclass of DetailView to display a profile's followers."""
+    
+    model = Profile
+    template_name = 'mini_insta/show_followers.html'
+    context_object_name = 'profile'
+
+class ShowFollowingDetailView(DetailView):
+    """Subclass of DetailView to display who a Profile is following."""
+    
+    model = Profile
+    template_name = 'mini_insta/show_following.html'
+    context_object_name = 'profile'

@@ -1,0 +1,61 @@
+<!-- mini_insta/templates/mini_insta/show_following.html -->
+<!-- Cody Headings, codyh@bu.edu, 10/17/25 -->
+<!-- html page for displaying an account's followed profiles -->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<main class="grid-container">
+    <profile>
+        {% if profile.profile_image_url %}
+        <a href="{% url 'show_profile' profile.pk %}">
+            <img src="{{profile.profile_image_url}}" 
+            alt="{{profile.profile_image_url}}">
+        </a>
+        {% endif %}
+
+        <div>
+            <a href="{% url 'show_profile' profile.pk %}">
+                <h1>{{profile.display_name}}</h1>
+            </a>
+            <h2>@{{profile.username}}</h2>
+
+            <div class="grid-container-2">
+                <div>
+                    <h3>Posts:</h3>
+                    <p>{{profile.get_post_count}}</p>
+                </div>
+                <div>
+                    <h3>Followers:</h3>
+                    <p>{{profile.get_num_followers}}</p>
+                </div>
+                <div>
+                    <h3>Following:</h3>
+                    <p>{{profile.get_num_following}}</p>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </profile>
+</main>
+
+<h2>Following:</h2>
+<main class="grid-container">
+    {% for p in profile.get_following %}
+    <profile>
+        {% if p.profile_image_url %}
+        <a href="{% url 'show_profile' p.pk %}">
+            <img class="thumbnail" src="{{p.profile_image_url}}" alt="{{p.profile_image_url}}">
+        </a>
+        {% endif %}
+
+        <div>
+            <a href="{% url 'show_profile' p.pk %}">
+                <h2>{{p.display_name}}</h2>
+            </a>
+            <p>@{{p.username}}</p>
+        </div>
+    </profile>
+    {% endfor %}
+</main>
+{% endblock %}

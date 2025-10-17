@@ -22,7 +22,20 @@
                 <h2>{{p.display_name}}</h2>
             </a>
             <p>@{{p.username}}</p>
-            <!-- put follower counts here eventually -->
+            <div class="grid-container-2">
+                <div>
+                    <h3>Posts:</h3>
+                    <p>{{p.get_post_count}}</p>
+                </div>
+                <div>
+                    <h3>Followers:</h3>
+                    <p>{{p.get_num_followers}}</p>
+                </div>
+                <div>
+                    <h3>Following:</h3>
+                    <p>{{p.get_num_following}}</p>
+                </div>
+            </div>
         </div>
     </profile>
     {% endfor %}
