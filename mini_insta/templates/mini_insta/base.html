@@ -16,8 +16,25 @@
                     <li><a class="button" href="{% url 'show_all_profiles' %}">
                         All Profiles
                     </a></li>
+                    {% if request.user.is_authenticated %}
+                    <form method="post" action="{% url 'logout' %}" >
+                        {% csrf_token %}
+                        <li><input type="submit" value="Logout" class="button"></li>
+                    </form>
+                    {% else %}
+                    <li><a class="button" href="{% url 'login' %}">
+                        Login
+                    </a></li>
+                    {% endif %}
                 </ul>
             </nav>
+            <div>
+                {% if request.user.is_authenticated %}
+                <p>Currently logged in as: {{request.user}}</p>
+                {% else %}
+                <p>Currently not logged in.</p>
+                {% endif %}
+            </div>
         </header>
         
         {% block content %}
@@ -25,19 +42,24 @@
         
         <footer>
             <div  class="footer-wrapper">
+                {% if request.user.is_authenticated %}
                 {% if profile %}
-                <p><a class="button" href="{% url 'show_feed' profile.pk%}">
+                <p><a class="button" href="{% url 'show_feed' %}">
                     Home
                 </a></p>
-                <p><a class="button" href="{% url 'search' profile.pk%}">
+                <p><a class="button" href="{% url 'search' %}">
                     Search
                 </a></p>
-                <p><a class="button" href="{% url 'create_post' profile.pk%}">
+                {% if profile.user == request.user %}
+                <p><a class="button" href="{% url 'create_post' %}">
                     Create a Post
                 </a></p>
+                {% endif %}
+                <!-- change this to use user's profile -->
                 <p><a class="button" href="{% url 'show_profile' profile.pk%}">
                     Profile
                 </a></p>
+                {% endif %}
                 {% endif %}
             </div>
         </footer>

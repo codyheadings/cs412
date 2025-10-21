@@ -7,6 +7,10 @@ from mini_insta.forms import *
 from .models import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.contrib.auth import login
 
 # Create your views here.
 class ProfileListView(ListView):
@@ -15,6 +19,29 @@ class ProfileListView(ListView):
     model = Profile
     template_name = 'mini_insta/show_all_profiles.html'
     context_object_name = 'profiles'
+
+    def get_object(self):
+        """Override default method to get object from current user."""
+        # find the logged in user
+        user = self.request.user
+
+        if user.is_authenticated:
+            profile = Profile.objects.get(user=user)
+        else:
+            profile = None
+        return profile
+
+    def get_context_data(self):
+        '''Return the dictionary of context variables for use in the template.'''
+        # calling the superclass method
+        context = super().get_context_data()
+ 
+        # find/add the profile to the context data
+        profile = self.get_object()
+        if profile != None:
+            # add this profile into the context dictionary:
+            context['profile'] = profile
+        return context
 
 class ProfileDetailView(DetailView):
     """Subclass of DetailView to display a single profile page."""
@@ -30,11 +57,25 @@ class PostDetailView(DetailView):
     template_name = 'mini_insta/show_post.html'
     context_object_name = 'post'
 
-class CreatePostView(CreateView):
+class CreatePostView(LoginRequiredMixin, CreateView):
     '''A view to create a new post and save it to the database.'''
  
     form_class = CreatePostForm
     template_name = "mini_insta/create_post_form.html"
+
+    def get_object(self):
+        """Override default method to get object from current user."""
+
+        # find the logged in user
+        user = self.request.user
+
+        profile = Profile.objects.get(user=user)
+
+        return profile
+
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
 
     def get_context_data(self):
         '''Return the dictionary of context variables for use in the template.'''
@@ -43,8 +84,8 @@ class CreatePostView(CreateView):
  
         # find/add the profile to the context data
         # retrieve the PK from the URL pattern
-        pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=pk)
+        # pk = self.kwargs['pk']
+        profile = self.get_object()
  
         # add this profile into the context dictionary:
         context['profile'] = profile
@@ -82,26 +123,48 @@ class CreatePostView(CreateView):
         """Redirects to new post page after successful creation."""
         return reverse('show_post', kwargs={'pk':self.object.pk})
     
-class UpdateProfileView(UpdateView):
+class UpdateProfileView(LoginRequiredMixin, UpdateView):
     """View class to handle update of a profile based on its pk."""
 
     model = Profile
     form_class = UpdateProfileForm
     template_name = "mini_insta/update_profile_form.html"
 
-class UpdatePostView(UpdateView):
+    def get_object(self):
+        """Override default method to get object from current user."""
+
+        # find the logged in user
+        user = self.request.user
+
+        profile = Profile.objects.get(user=user)
+
+        return profile
+
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+
+class UpdatePostView(LoginRequiredMixin, UpdateView):
     """View class to handle update of a post based on its pk."""
 
     model = Post
     form_class = UpdatePostForm
     template_name = "mini_insta/update_post_form.html"
 
-class DeletePostView(DeleteView):
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+
+class DeletePostView(LoginRequiredMixin, DeleteView):
     '''A view to delete a Post and remove it from the database.'''
  
     template_name = "mini_insta/delete_post_form.html"
     model = Post
     context_object_name = 'post'
+
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
 
     def get_context_data(self, **kwargs):
         """Provides context data to the delet post form."""
@@ -144,41 +207,67 @@ class ShowFollowingDetailView(DetailView):
     template_name = 'mini_insta/show_following.html'
     context_object_name = 'profile'
 
-class PostFeedListView(ListView):
+class PostFeedListView(LoginRequiredMixin, ListView):
     """Create a subclass of ListView to display post feed for a profile."""
     
     model = Post
     template_name = 'mini_insta/show_feed.html'
     context_object_name = 'posts'
 
+    def get_object(self):
+        """Override default method to get object from current user."""
+
+        # find the logged in user
+        user = self.request.user
+
+        profile = Profile.objects.get(user=user)
+
+        return profile
+
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+
     def get_queryset(self):
         """Return the feed posts from followed profiles."""
-        pk = self.kwargs.get('pk')
-        profile = Profile.objects.get(pk=pk)
+        profile = Profile.objects.get(user=self.request.user)
         return profile.get_post_feed()
 
     def get_context_data(self, **kwargs):
         """Add the profile object to the context data."""
         context = super().get_context_data(**kwargs)
 
-        pk = self.kwargs.get('pk')
-        profile = Profile.objects.get(pk=pk)
+        profile = self.get_object()
 
         context['profile'] = profile
         return context
     
-class SearchView(ListView):
+class SearchView(LoginRequiredMixin, ListView):
     """Subclass of ListView to display Post and Profile search results."""
     
     template_name = 'mini_insta/search_results.html'
     context_object_name = 'posts'
 
+    def get_object(self):
+        """Override default method to get object from current user."""
+
+        # find the logged in user
+        user = self.request.user
+
+        profile = Profile.objects.get(user=user)
+
+        return profile
+
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+
     def dispatch(self, request, *args, **kwargs):
         """Method called to handle any request."""
         # get search query and profile and store in object
         self.query = self.query = self.request.GET.get('query')
-        self.profile = Profile.objects.get(pk=self.kwargs['pk'])
-        
+        self.profile = self.get_object()
+
         if(not self.query):
             return render(request, 'mini_insta/search.html', {'profile': self.profile})
         else:
@@ -207,3 +296,19 @@ class SearchView(ListView):
 
         context['matches'] = matches
         return context
+    
+class LoginRequiredSubclass(LoginRequiredMixin):
+    """Subclass of LoginRequiredMixin with specific mini_insta functions."""
+
+    def get_logged_in_profile(self):
+        """Returns the profile object for the logged in user."""
+
+        # find the logged in user
+        user = self.request.user
+
+        profile = Profile.objects.get(user=user)
+
+        return profile
+    
+    def get_login_url(self):
+        return

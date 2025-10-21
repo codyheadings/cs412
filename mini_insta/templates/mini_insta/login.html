@@ -1,0 +1,23 @@
+<!-- mini_insta/templates/mini_insta/login.html -->
+<!-- Cody Headings, codyh@bu.edu 10/20/25 -->
+<!-- html page of log in form for user auth -->
+
+{% extends 'mini_insta/base.html' %}
+ 
+ 
+{% block content %}
+<h1>Login</h1>
+<form method="post" action="{% url 'login' %}" >
+    {% csrf_token %}
+    {{form}}
+    <input type="submit" value="Login">
+
+    {% if request.GET.next %}
+    <input type="hidden" name="next" value="{{request.GET.next}}">
+    {% else %}
+    <input type="hidden" name="next" value="{% url 'show_all_profiles' %}">
+    {% endif %}
+</form>
+<hr>
+Don't have an account? <a href="{% url 'register' %}">Register here</a>.
+{% endblock %}

@@ -40,10 +40,12 @@
             <p>{{profile.bio_text}}</p>
             <p>Joined {{profile.join_date}}</p>
         </div>
+        {% if profile.user == request.user %}
         <div>
-            <a class="button" href="{% url 'update_profile' profile.pk %}">
+            <a class="button" href="{% url 'update_profile' %}">
                 Update Profile</a>
         </div>
+        {% endif %}
     </profile>
 
     <div class="profile-posts">
