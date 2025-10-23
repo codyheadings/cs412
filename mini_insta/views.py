@@ -312,3 +312,34 @@ class LoginRequiredSubclass(LoginRequiredMixin):
     
     def get_login_url(self):
         return
+    
+class CreateProfileView(CreateView):
+    """A view to create a new profile and save it to the database."""
+
+    form_class = CreateProfileForm
+    template_name = "mini_insta/create_profile_form.html"
+
+    def get_context_data(self):
+        '''Return the dictionary of context variables for use in the template.'''
+        context = super().get_context_data()
+ 
+        # add UserCreationForm into the context dictionary:
+        context['user_form'] = UserCreationForm
+        return context
+    
+    def form_valid(self, form):
+        '''Handles the form submission and saves the 
+        new object to the Django database.
+        '''
+
+        print(f"CreateProfileView.form_valid: cleaned_data={form.cleaned_data}")
+        
+        user_form = UserCreationForm(self.request.POST)
+        user = user_form.save()
+
+        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+ 
+        form.instance.user = user
+
+        # delegate to the superclass method form_valid:
+        return super().form_valid(form)

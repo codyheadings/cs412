@@ -1,0 +1,43 @@
+<!-- mini_insta/templates/mini_insta/create_profile_form.html -->
+<!-- Cody Headings, codyh@bu.edu 10/21/2025 -->
+<!-- html page form for creating a new user profile -->
+{% extends 'mini_insta/base.html' %}
+ 
+{% block content %}
+<h2>Create Profile</h2>
+
+<form method = 'POST' enctype="multipart/form-data">
+{% csrf_token %}
+
+    <table>
+    {{user_form}}
+    <tr>
+        <th>Profile Username:</th>
+        <td>{{form.username}}</td>
+    </tr>
+    <tr>
+        <th>Display Name:</th>
+        <td>{{form.display_name}}</td>
+    </tr>
+    <tr>
+        <th>Bio Text:</th>
+        <td>{{form.bio_text}}</td>
+    </tr>
+    <tr>
+        <th>Profile Image URL:</th>
+        <td>{{form.profile_image_url}}</td>
+    </tr>
+    <tr>
+        <td>
+            <input class="button" type='submit' name ='create_profile' 
+            value='Create Profile'>
+        </td>
+    </tr>
+    </table>
+</form>
+
+<form action="{% url 'show_all_profiles' %}" method="GET">
+    <input class="button" type='submit' value='Cancel'>
+</form>
+
+{% endblock %}
