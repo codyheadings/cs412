@@ -5,7 +5,7 @@
 from django.shortcuts import render
 from mini_insta.forms import *
 from .models import *
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
@@ -50,12 +50,46 @@ class ProfileDetailView(DetailView):
     template_name = 'mini_insta/show_profile.html'
     context_object_name = 'profile'
 
+    def get_context_data(self, **kwargs):
+        '''Return the dictionary of context variables for use in the template.'''
+        # calling the superclass method
+        context = super().get_context_data()
+ 
+        # check if user is following this profile
+        user = self.request.user
+        user_profile = Profile.objects.get(user=user)
+        page_profile = Profile.objects.get(pk=self.kwargs["pk"])
+
+        is_following = Follow.objects.filter(profile=page_profile, follower_profile=user_profile)
+        
+        if is_following.exists():
+            context['is_following'] = "true"
+
+        return context
+
 class PostDetailView(DetailView):
     """Subclass of DetailView to display a single post page."""
     
     model = Post
     template_name = 'mini_insta/show_post.html'
     context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        '''Return the dictionary of context variables for use in the template.'''
+        # calling the superclass method
+        context = super().get_context_data()
+ 
+        # check if user has liked this post
+        user = self.request.user
+        user_profile = Profile.objects.get(user=user)
+        post = Post.objects.get(pk=self.kwargs["pk"])
+
+        is_liked = Like.objects.filter(profile=user_profile, post=post)
+        
+        if is_liked.exists():
+            context['is_liked'] = "true"
+
+        return context
 
 class CreatePostView(LoginRequiredMixin, CreateView):
     '''A view to create a new post and save it to the database.'''
@@ -297,22 +331,6 @@ class SearchView(LoginRequiredMixin, ListView):
         context['matches'] = matches
         return context
     
-class LoginRequiredSubclass(LoginRequiredMixin):
-    """Subclass of LoginRequiredMixin with specific mini_insta functions."""
-
-    def get_logged_in_profile(self):
-        """Returns the profile object for the logged in user."""
-
-        # find the logged in user
-        user = self.request.user
-
-        profile = Profile.objects.get(user=user)
-
-        return profile
-    
-    def get_login_url(self):
-        return
-    
 class CreateProfileView(CreateView):
     """A view to create a new profile and save it to the database."""
 
@@ -343,3 +361,115 @@ class CreateProfileView(CreateView):
 
         # delegate to the superclass method form_valid:
         return super().form_valid(form)
+    
+class FollowProfileView(TemplateView):
+    """A view to have the logged in user follow another user's profile."""
+
+    template_name="mini_insta/follow.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        """Accepts HTTP request and handles response logic."""
+
+        user = self.request.user
+        follower_profile = Profile.objects.get(user=user)
+
+        followed_profile = Profile.objects.get(pk=self.kwargs["pk"])
+
+        # If follow doesn't exist, create it
+        if len(Follow.objects.filter(profile=followed_profile, follower_profile=follower_profile)) == 0:
+            Follow.objects.create(profile=followed_profile, follower_profile=follower_profile)
+
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        '''Return the dictionary of context variables for use in the template.'''
+        context = super().get_context_data()
+ 
+        # add followed profile into the context dictionary:
+        followed_profile = Profile.objects.get(pk=self.kwargs["pk"])
+        context['followed_profile'] = followed_profile
+        return context
+    
+class DeleteFollowView(TemplateView):
+    """A view to have the logged in user unfollow another user's profile."""
+
+    template_name="mini_insta/delete_follow.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        """Accepts HTTP request and handles response logic."""
+
+        user = self.request.user
+        unfollower_profile = Profile.objects.get(user=user)
+        unfollowed_profile = Profile.objects.get(pk=self.kwargs["pk"])
+
+        # If follow exists, delete it
+        if Follow.objects.filter(profile=unfollowed_profile, follower_profile=unfollower_profile).exists():
+            follow = Follow.objects.get(profile=unfollowed_profile, follower_profile=unfollower_profile)
+            follow.delete()
+
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        '''Return the dictionary of context variables for use in the template.'''
+        context = super().get_context_data()
+ 
+        # add unfollowed profile into the context dictionary:
+        unfollowed_profile = Profile.objects.get(pk=self.kwargs["pk"])
+        context['unfollowed_profile'] = unfollowed_profile
+        return context
+
+class LikePostView(TemplateView):
+    """A view to have the logged in user like another user's post."""
+
+    template_name="mini_insta/like.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        """Accepts HTTP request and handles response logic."""
+
+        user = self.request.user
+        liker_profile = Profile.objects.get(user=user)
+
+        liked_post = Post.objects.get(pk=self.kwargs["pk"])
+
+        # If like doesn't exist, create it
+        if len(Like.objects.filter(profile=liker_profile, post=liked_post)) == 0:
+            Like.objects.create(profile=liker_profile, post=liked_post)
+
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        '''Return the dictionary of context variables for use in the template.'''
+        context = super().get_context_data()
+ 
+        # add liked post into the context dictionary:
+        liked_post = Post.objects.get(pk=self.kwargs["pk"])
+        context['liked_post'] = liked_post
+        return context
+    
+class DeleteLikeView(TemplateView):
+    """A view to have the logged in user unlike another user's post."""
+
+    template_name="mini_insta/delete_like.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        """Accepts HTTP request and handles response logic."""
+
+        user = self.request.user
+        liker_profile = Profile.objects.get(user=user)
+        unliked_post = Post.objects.get(pk=self.kwargs["pk"])
+
+        # If like exists, delete it
+        if Like.objects.filter(profile=liker_profile, post=unliked_post).exists():
+            like = Like.objects.get(profile=liker_profile, post=unliked_post)
+            like.delete()
+
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        '''Return the dictionary of context variables for use in the template.'''
+        context = super().get_context_data()
+ 
+        # add unliked post into the context dictionary:
+        unliked_post = Post.objects.get(pk=self.kwargs["pk"])
+        context['unliked_post'] = unliked_post
+        return context

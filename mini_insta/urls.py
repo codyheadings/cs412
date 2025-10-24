@@ -9,7 +9,11 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('', ProfileListView.as_view(), name='show_all_profiles'),
     path('profile/<int:pk>', ProfileDetailView.as_view(), name='show_profile'),
+    path('profile/<int:pk>/follow', FollowProfileView.as_view(), name='follow'),
+    path('profile/<int:pk>/delete_follow', DeleteFollowView.as_view(), name='delete_follow'),
     path('post/<int:pk>', PostDetailView.as_view(), name='show_post'),
+    path('post/<int:pk>/like', LikePostView.as_view(), name='like'),
+    path('post/<int:pk>/delete_like', DeleteLikeView.as_view(), name='delete_like'),
     path('profile/<int:pk>/followers', ShowFollowersDetailView.as_view(), name='show_followers'),
     path('profile/<int:pk>/following', ShowFollowingDetailView.as_view(), name='show_following'),
     path('profile/create_post', CreatePostView.as_view(), name='create_post'),

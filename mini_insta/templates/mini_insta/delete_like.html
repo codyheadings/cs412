@@ -1,0 +1,12 @@
+<!-- mini_insta/templates/mini_insta/delete_like.html -->
+<!-- Cody Headings, codyh@bu.edu 10/23/25 -->
+<!-- html page for unliking a post -->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<p class="center">You have successfully unliked the post.</p>
+<div class="center">
+    <a class="button" href="{% url 'show_post' unliked_post.pk %}">Return to the Post</a>
+</div>
+{% endblock %}

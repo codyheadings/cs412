@@ -30,17 +30,32 @@
     <tr>
         <p>{{post.caption}}</p>
         <hr>
-        <p>Posted by {{post.profile}} on {{post.timestamp}}</p>
+        <p>Posted by <a href="{% url 'show_profile' post.profile.pk %}">{{post.profile}}</a> on {{post.timestamp}}</p>
     </tr>
 </table>
-<!-- link to delete this post -->
-<a class="button" href="{% url 'delete_post' post.pk %}">Delete Post</a>
-<!-- link to update this post -->
-<a class="button" href="{% url 'update_post' post.pk %}">Update Post</a>
+
+{% if post.profile.user == request.user %}
+<div>
+    <a class="button" href="{% url 'update_post' post.pk %}">Update Post</a>
+</div>
+<br>
+<div>
+    <a class="button" href="{% url 'delete_post' post.pk %}">Delete Post</a>
+</div>
+{% else %}
+    {% if is_liked %}
+    <div>
+        <a class="button" href="{% url 'delete_like' post.pk %}">
+            Unlike Post</a>
+    </div>
+    {% else %}
+    <div>
+        <a class="button" href="{% url 'like' post.pk %}">
+            Like Post</a>
+    </div>
+    {% endif %}
+{% endif %}
 <br><br>
-<a class="button" href="{{ post.profile.get_absolute_url}}">
-            View this user's posts
-        </a>
 </main>
 
 <main class="container">

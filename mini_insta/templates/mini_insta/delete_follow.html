@@ -1,0 +1,12 @@
+<!-- mini_insta/templates/mini_insta/delete_follow.html -->
+<!-- Cody Headings, codyh@bu.edu 10/23/25 -->
+<!-- html page for unfollowing another profile -->
+
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<p class="center">You have successfully unfollowed {{unfollowed_profile}}.</p>
+<div class="center">
+    <a class="button" href="{% url 'show_profile' unfollowed_profile.pk %}">Return to their Profile</a>
+</div>
+{% endblock %}
