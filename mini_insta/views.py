@@ -57,13 +57,15 @@ class ProfileDetailView(DetailView):
  
         # check if user is following this profile
         user = self.request.user
-        user_profile = Profile.objects.get(user=user)
-        page_profile = Profile.objects.get(pk=self.kwargs["pk"])
 
-        is_following = Follow.objects.filter(profile=page_profile, follower_profile=user_profile)
-        
-        if is_following.exists():
-            context['is_following'] = "true"
+        if user.is_authenticated:
+            user_profile = Profile.objects.get(user=user)
+            page_profile = Profile.objects.get(pk=self.kwargs["pk"])
+
+            is_following = Follow.objects.filter(profile=page_profile, follower_profile=user_profile)
+            
+            if is_following.exists():
+                context['is_following'] = "true"
 
         return context
 
@@ -81,13 +83,15 @@ class PostDetailView(DetailView):
  
         # check if user has liked this post
         user = self.request.user
-        user_profile = Profile.objects.get(user=user)
-        post = Post.objects.get(pk=self.kwargs["pk"])
 
-        is_liked = Like.objects.filter(profile=user_profile, post=post)
-        
-        if is_liked.exists():
-            context['is_liked'] = "true"
+        if user.is_authenticated:
+            user_profile = Profile.objects.get(user=user)
+            post = Post.objects.get(pk=self.kwargs["pk"])
+
+            is_liked = Like.objects.filter(profile=user_profile, post=post)
+            
+            if is_liked.exists():
+                context['is_liked'] = "true"
 
         return context
 
@@ -362,22 +366,27 @@ class CreateProfileView(CreateView):
         # delegate to the superclass method form_valid:
         return super().form_valid(form)
     
-class FollowProfileView(TemplateView):
+class FollowProfileView(LoginRequiredMixin, TemplateView):
     """A view to have the logged in user follow another user's profile."""
 
     template_name="mini_insta/follow.html"
+
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
 
     def dispatch(self, request, *args, **kwargs):
         """Accepts HTTP request and handles response logic."""
 
         user = self.request.user
-        follower_profile = Profile.objects.get(user=user)
+        if user.is_authenticated:
+            follower_profile = Profile.objects.get(user=user)
 
-        followed_profile = Profile.objects.get(pk=self.kwargs["pk"])
+            followed_profile = Profile.objects.get(pk=self.kwargs["pk"])
 
-        # If follow doesn't exist, create it
-        if len(Follow.objects.filter(profile=followed_profile, follower_profile=follower_profile)) == 0:
-            Follow.objects.create(profile=followed_profile, follower_profile=follower_profile)
+            # If follow doesn't exist, create it
+            if len(Follow.objects.filter(profile=followed_profile, follower_profile=follower_profile)) == 0:
+                Follow.objects.create(profile=followed_profile, follower_profile=follower_profile)
 
         return super().dispatch(request, *args, **kwargs)
     
@@ -390,22 +399,27 @@ class FollowProfileView(TemplateView):
         context['followed_profile'] = followed_profile
         return context
     
-class DeleteFollowView(TemplateView):
+class DeleteFollowView(LoginRequiredMixin, TemplateView):
     """A view to have the logged in user unfollow another user's profile."""
 
     template_name="mini_insta/delete_follow.html"
+
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
 
     def dispatch(self, request, *args, **kwargs):
         """Accepts HTTP request and handles response logic."""
 
         user = self.request.user
-        unfollower_profile = Profile.objects.get(user=user)
-        unfollowed_profile = Profile.objects.get(pk=self.kwargs["pk"])
+        if user.is_authenticated:
+            unfollower_profile = Profile.objects.get(user=user)
+            unfollowed_profile = Profile.objects.get(pk=self.kwargs["pk"])
 
-        # If follow exists, delete it
-        if Follow.objects.filter(profile=unfollowed_profile, follower_profile=unfollower_profile).exists():
-            follow = Follow.objects.get(profile=unfollowed_profile, follower_profile=unfollower_profile)
-            follow.delete()
+            # If follow exists, delete it
+            if Follow.objects.filter(profile=unfollowed_profile, follower_profile=unfollower_profile).exists():
+                follow = Follow.objects.get(profile=unfollowed_profile, follower_profile=unfollower_profile)
+                follow.delete()
 
         return super().dispatch(request, *args, **kwargs)
     
@@ -418,22 +432,27 @@ class DeleteFollowView(TemplateView):
         context['unfollowed_profile'] = unfollowed_profile
         return context
 
-class LikePostView(TemplateView):
+class LikePostView(LoginRequiredMixin, TemplateView):
     """A view to have the logged in user like another user's post."""
 
     template_name="mini_insta/like.html"
+
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
 
     def dispatch(self, request, *args, **kwargs):
         """Accepts HTTP request and handles response logic."""
 
         user = self.request.user
-        liker_profile = Profile.objects.get(user=user)
+        if user.is_authenticated:
+            liker_profile = Profile.objects.get(user=user)
 
-        liked_post = Post.objects.get(pk=self.kwargs["pk"])
+            liked_post = Post.objects.get(pk=self.kwargs["pk"])
 
-        # If like doesn't exist, create it
-        if len(Like.objects.filter(profile=liker_profile, post=liked_post)) == 0:
-            Like.objects.create(profile=liker_profile, post=liked_post)
+            # If like doesn't exist, create it
+            if len(Like.objects.filter(profile=liker_profile, post=liked_post)) == 0:
+                Like.objects.create(profile=liker_profile, post=liked_post)
 
         return super().dispatch(request, *args, **kwargs)
     
@@ -446,22 +465,27 @@ class LikePostView(TemplateView):
         context['liked_post'] = liked_post
         return context
     
-class DeleteLikeView(TemplateView):
+class DeleteLikeView(LoginRequiredMixin, TemplateView):
     """A view to have the logged in user unlike another user's post."""
 
     template_name="mini_insta/delete_like.html"
+
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
 
     def dispatch(self, request, *args, **kwargs):
         """Accepts HTTP request and handles response logic."""
 
         user = self.request.user
-        liker_profile = Profile.objects.get(user=user)
-        unliked_post = Post.objects.get(pk=self.kwargs["pk"])
+        if user.is_authenticated:
+            liker_profile = Profile.objects.get(user=user)
+            unliked_post = Post.objects.get(pk=self.kwargs["pk"])
 
-        # If like exists, delete it
-        if Like.objects.filter(profile=liker_profile, post=unliked_post).exists():
-            like = Like.objects.get(profile=liker_profile, post=unliked_post)
-            like.delete()
+            # If like exists, delete it
+            if Like.objects.filter(profile=liker_profile, post=unliked_post).exists():
+                like = Like.objects.get(profile=liker_profile, post=unliked_post)
+                like.delete()
 
         return super().dispatch(request, *args, **kwargs)
     
