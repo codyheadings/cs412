@@ -5,7 +5,11 @@
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
+{% if own_post %}
+<p class="center">You cannot like your own post.</p>
+{% else %}
 <p class="center">You have successfully liked the post.</p>
+{% endif %}
 <div class="center">
     <a class="button" href="{% url 'show_post' liked_post.pk %}">Return to the Post</a>
 </div>

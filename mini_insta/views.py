@@ -385,7 +385,8 @@ class FollowProfileView(LoginRequiredMixin, TemplateView):
             followed_profile = Profile.objects.get(pk=self.kwargs["pk"])
 
             # If follow doesn't exist, create it
-            if len(Follow.objects.filter(profile=followed_profile, follower_profile=follower_profile)) == 0:
+            if (len(Follow.objects.filter(profile=followed_profile, follower_profile=follower_profile)) == 0
+            and followed_profile != follower_profile):
                 Follow.objects.create(profile=followed_profile, follower_profile=follower_profile)
 
         return super().dispatch(request, *args, **kwargs)
@@ -395,7 +396,10 @@ class FollowProfileView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data()
  
         # add followed profile into the context dictionary:
+        user = self.request.user
         followed_profile = Profile.objects.get(pk=self.kwargs["pk"])
+        if followed_profile == Profile.objects.get(user=user):
+            context['own_profile'] = True
         context['followed_profile'] = followed_profile
         return context
     
@@ -451,7 +455,8 @@ class LikePostView(LoginRequiredMixin, TemplateView):
             liked_post = Post.objects.get(pk=self.kwargs["pk"])
 
             # If like doesn't exist, create it
-            if len(Like.objects.filter(profile=liker_profile, post=liked_post)) == 0:
+            if (len(Like.objects.filter(profile=liker_profile, post=liked_post)) == 0
+            and liker_profile!=liked_post.profile):
                 Like.objects.create(profile=liker_profile, post=liked_post)
 
         return super().dispatch(request, *args, **kwargs)
@@ -461,7 +466,10 @@ class LikePostView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data()
  
         # add liked post into the context dictionary:
+        user = self.request.user
         liked_post = Post.objects.get(pk=self.kwargs["pk"])
+        if liked_post.profile == Profile.objects.get(user=user):
+            context['own_post'] = True
         context['liked_post'] = liked_post
         return context
     

@@ -5,7 +5,11 @@
 {% extends 'mini_insta/base.html' %}
 
 {% block content %}
+{% if own_profile %}
+<p class="center">You cannot follow your own profile.</p>
+{% else %}
 <p class="center">You have successfully followed {{followed_profile}}.</p>
+{% endif %}
 <div class="center">
     <a class="button" href="{% url 'show_profile' followed_profile.pk %}">Return to their Profile</a>
 </div>
