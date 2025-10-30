@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'quotes', #a1
     'restaurant', #a2
     'mini_insta', #a3
+    'marathon_analytics',
 ]
 
 MIDDLEWARE = [
