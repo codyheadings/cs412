@@ -1,24 +1,24 @@
 <!-- voter_analytics/templates/voter_analytics/base.html -->
-<!-- Cody Headings, codyh@bu.edu 10/20/2025 -->
+<!-- Cody Headings, codyh@bu.edu 10/30/2025 -->
 <!-- html page to display list of voter records -->
 
 {% load static %}
 <html>
     <head>
         <title>Voter Analytics</title>
-        <link rel="stylesheet" href="{% static 'styles.css' %}">
+        <link rel="stylesheet" href="{% static 'styles-voters.css' %}">
     </head>
     <body>
         <header>
             <h1>Voter Analytics</h1>
             <nav>
                 <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'voters' %}">Home</a></li>
                 </ul>
  
             </nav>
         </header>
-    
+    <br><br>
     {% block content %}
     {% endblock %}    
   

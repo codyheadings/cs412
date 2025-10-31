@@ -29,6 +29,11 @@ class Voter(models.Model):
     v22general = models.TextField()
     v23town = models.TextField()
     voter_score = models.IntegerField()
+
+    def formatted_zip(self):
+        if len(self.address_zip) == 8:
+            return f"{self.address_zip[:4]}-{self.address_zip[4:]}"
+        return self.address_zip
  
     def __str__(self):
         '''Return a string representation of this model instance.'''
