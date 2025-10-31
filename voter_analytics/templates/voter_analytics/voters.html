@@ -1,0 +1,66 @@
+<!-- voter_analytics/templates/voter_analytics/voters.html -->
+<!-- Cody Headings, codyh@bu.edu 10/30/2025 -->
+<!-- html page to display list of voter records -->
+
+{% extends 'voter_analytics/base.html' %}
+<h1>Showing all Voters</h1>
+ 
+{% block content %}
+<div class="container">
+
+    <!-- <div class="row">
+        { include "voter_analytics/search.html" }    
+    </div> -->
+    <h1>Results</h1>
+ 
+    <!-- navigation links for different pages of voters -->
+    <div class="row">
+        {% if is_paginated %}
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li>
+                    <span><a href="?page={{ page_obj.previous_page_number }}">Previous</a></span>
+                
+                </li>
+            {% endif %}
+                <li class="">
+                    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+                </li>
+            {% if page_obj.has_next %}
+                <li>
+                    <span><a href="?page={{ page_obj.next_page_number }}">Next</a></span>
+                </li>
+            {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+    
+	<!-- table of voters -->
+    <div class="row">
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Date of Birth</th>
+                <th>Party Affiliation</th>
+                <th>Voter Score</th>
+            </tr>
+    
+            {% for v in voters %}
+            <tr>
+            
+                <td>
+                    {{v.first_name}} {{v.last_name}}
+                </td>
+                <td>{{v.address_number}} {{v.address_street}} {{v.address_apt_number}} {{v.address_zip}}</td>
+                <td>{{v.dob|date:"M d, Y"}}</td>
+                <td>{{v.party}}</td>
+                <td>{{v.voter_score}}</td>
+            
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>    
+{% endblock %}
