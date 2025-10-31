@@ -1,0 +1,26 @@
+<!-- voter_analytics/templates/voter_analytics/graphs.html -->
+<!-- Cody Headings, codyh@bu.edu 10/31/2025 -->
+<!-- html page to display graphs of voter records -->
+
+{% extends 'voter_analytics/base.html' %}
+ 
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        {% include "voter_analytics/search_graphs.html" %}    
+    </div>
+    <h1>Graphs</h1>
+    <div class="row">
+        <h3>Distribution of Voters by Year of Birth</h3>
+        {{ graph_div_dob|safe }}
+
+        <h3>Distribution of Voters by Party Affiliation</h3>
+        {{ graph_div_party|safe }}
+
+        <h3>Voter Participation in Elections</h3>
+        {{ graph_div_elect|safe }}
+    </div>
+
+</div>    
+{% endblock %}
