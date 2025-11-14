@@ -64,6 +64,11 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8081",
+    "http://localhost:3000",
+]
+
 ROOT_URLCONF = 'cs412.urls'
 
 TEMPLATES = [
