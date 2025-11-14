@@ -1,0 +1,15 @@
+<!-- dadjokes/templates/dadjokes/show_joke.html -->
+<!-- Cody Headings, codyh@bu.edu 11/13/2025 -->
+<!-- html page for detail view of one joke object -->
+
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<main class="grid-container">
+    <div>
+        <h3>{{joke.text}}</h3>
+        <br>
+        <p>This joke was contributed by {{joke.name}}!</p>
+    </div>
+</main>
+{% endblock %}

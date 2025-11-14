@@ -1,0 +1,15 @@
+<!-- dadjokes/templates/dadjokes/show_picture.html -->
+<!-- Cody Headings, codyh@bu.edu 11/13/2025 -->
+<!-- html page for detail view of one picture object -->
+
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<main class="grid-container">
+    <div>
+        <img src="{{picture.image_url}}" alt="{{picture.image_url}}" class="post-pic">
+        <br>
+        <p>This picture was contributed by {{picture.name}}!</p>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,20 @@
+<!-- dadjokes/templates/dadjokes/show_all_pictures.html -->
+<!-- Cody Headings, codyh@bu.edu 11/13/2025 -->
+<!-- html page for list view of all picture objects -->
+
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<main class="grid-container">
+    <h1>All Pictures</h1>
+    {% for picture in pictures %}
+    <div>
+        <a href="{% url 'show_picture' picture.pk %}">
+            <img src="{{picture.image_url}}" 
+            alt="{{picture.image_url}}" class="post-thumbnail">
+        </a>
+        <p class="name">-contributed by {{picture.name}}</p>
+    </div>
+    {%endfor%}
+</main>
+{% endblock %}

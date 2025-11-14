@@ -1,0 +1,17 @@
+<!-- dadjokes/templates/dadjokes/show_all_jokes.html -->
+<!-- Cody Headings, codyh@bu.edu 11/13/2025 -->
+<!-- html page for list view of all joke objects -->
+
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<main class="grid-container">
+    <h1>All Jokes</h1>
+    {% for joke in jokes %}
+    <div>
+        <a href="{% url 'show_joke' joke.pk %}"><h3>{{joke.text}}</h3></a>
+        <p class="name">-contributed by {{joke.name}}</p>
+    </div>
+    {%endfor%}
+</main>
+{% endblock %}

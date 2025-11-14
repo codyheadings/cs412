@@ -1,0 +1,32 @@
+<!-- dadjokes/templates/dadjokes/base.html -->
+<!-- Cody Headings, codyh@bu.edu 11/13/2025 -->
+<!-- base html template with head/nav to be extended -->
+
+{% load static %}
+<html>
+    <head>
+        <title>Dad Jokes</title>
+        <link rel="stylesheet" href="{% static 'styles-dadjokes.css' %}">
+    </head>
+    <body>
+        <header>
+            <h1>Dad Jokes</h1>
+            <nav>
+                <ul>
+                    <li><a class="button" href="{% url 'random' %}">
+                        Random
+                    </a></li>
+                    <li><a class="button" href="{% url 'show_all_jokes' %}">
+                        All Jokes
+                    </a></li>
+                    <li><a class="button" href="{% url 'show_all_pictures' %}">
+                        All Pictures
+                    </a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>

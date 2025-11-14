@@ -1,0 +1,18 @@
+<!-- dadjokes/templates/dadjokes/random.html -->
+<!-- Cody Headings, codyh@bu.edu 11/13/2025 -->
+<!-- html page for singular view of joke and picture objects -->
+
+{% extends 'dadjokes/base.html' %}
+
+{% block content %}
+<main class="grid-container">
+    <div>
+        <h3>{{joke.text}}</h3>
+    </div>
+</main>
+<main class="grid-container">
+    <div>
+        <img src="{{picture}}" alt="{{picture}}" class="post-thumbnail">
+    </div>
+</main>
+{% endblock %}

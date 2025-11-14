@@ -1,4 +1,4 @@
-# file: mini_insta/models.py
+# file: dadjokes/models.py
 # author: Cody Headings, codyh@bu.edu, 11/11/2025
 # desc: definitions for data models
 from django.db import models
