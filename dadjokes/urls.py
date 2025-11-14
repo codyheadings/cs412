@@ -4,7 +4,6 @@
 
 from django.urls import path
 from .views import *
-from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', RandomView.as_view(), name='random'),
@@ -17,7 +16,7 @@ urlpatterns = [
     path(r'api/random/', RandomJokeAPIView.as_view(), name="random_joke_api"),
     path(r'api/random_picture/', RandomPictureAPIView.as_view(), name="random_picture_api"),
     path(r'api/jokes/', JokeListAPIView.as_view(), name="joke_list_api"),
-    # path(r'api/joke/<int:pk>', JokeDetailAPIView.as_view(), name="joke_detail_api"),
+    path(r'api/joke/<int:pk>', JokeDetailAPIView.as_view(), name="joke_detail_api"),
     path(r'api/pictures/', PictureListAPIView.as_view(), name="picture_list_api"),
-    # path(r'api/pictures/<int:pk>', PictureDetailAPIView.as_view(), name="picture_detail_api"),
+    path(r'api/picture/<int:pk>', PictureDetailAPIView.as_view(), name="picture_detail_api"),
 ]

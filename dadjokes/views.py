@@ -80,9 +80,11 @@ class RandomJokeAPIView(generics.RetrieveAPIView):
     An API view to return a random Joke.
     """
 
-    def get_object(self):
-        return random.choice(Joke.objects.all())
     serializer_class = JokeSerializer
+
+    def get_object(self):
+        """Override default to get a random Joke."""
+        return random.choice(Joke.objects.all())
 
 class PictureListAPIView(generics.ListAPIView):
     """
@@ -97,6 +99,32 @@ class RandomPictureAPIView(generics.RetrieveAPIView):
     An API view to return a random Picture.
     """
 
-    def get_object(self):
-        return random.choice(Picture.objects.all())
     serializer_class = PictureSerializer
+
+    def get_object(self):
+        """Override default to get a random Joke."""
+        return random.choice(Picture.objects.all())
+
+class PictureDetailAPIView(generics.RetrieveAPIView):
+    """
+    An API view to return a Picture by its primary key.
+    """
+
+    serializer_class = PictureSerializer
+
+    def get_object(self):
+        """Override default to get a Picture by its PK."""
+        pk = self.kwargs['pk']
+        return Picture.objects.get(pk=pk)
+    
+class JokeDetailAPIView(generics.RetrieveAPIView):
+    """
+    An API view to return a Joke by its primary key.
+    """
+
+    serializer_class = JokeSerializer
+
+    def get_object(self):
+        """Override default to get a Joke by its PK."""
+        pk = self.kwargs['pk']
+        return Joke.objects.get(pk=pk)
