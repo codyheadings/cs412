@@ -1,0 +1,22 @@
+<!-- promptmix/templates/promptmix/show_profile.html -->
+<!-- Cody Headings, codyh@bu.edu 11/27/25 -->
+<!-- html page for singular view of profile object -->
+
+{% extends 'promptmix/base.html' %}
+
+{% block content %}
+<main class="grid-container">
+    <profile>
+        {% if profile.profile_image_url %}
+        <img src="{{profile.profile_image_url}}" 
+        alt="{{profile.profile_image_url}}">
+        {% endif %}
+
+        <div>
+            <h1>{{profile.display_name}}</h1>
+            <hr>
+            <p>Joined {{profile.join_date}}</p>
+        </div>
+    </profile>
+</main>
+{% endblock %}

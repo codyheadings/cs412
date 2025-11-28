@@ -1,0 +1,31 @@
+<!-- promptmix/templates/promptmix/base.html -->
+<!-- Cody Headings, codyh@bu.edu, 11/25/2025 -->
+<!-- base html template with head/nav to be extended -->
+
+{% load static %}
+<html>
+    <head>
+        <title>Promptmix</title>
+        <link rel="stylesheet" href="{% static 'styles-promptmix.css' %}">
+    </head>
+    <body>
+        <header>
+            <h1>Promptmix</h1>
+            <nav>
+                <ul>
+                    <!-- Add some nav options here -->
+                    <li><a href=""></a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        {% block content %}
+        {% endblock %}
+        
+        <footer>
+            <div  class="footer-wrapper">
+                <!-- Add some nav options here -->
+            </div>
+        </footer>
+    </body>
+</html>

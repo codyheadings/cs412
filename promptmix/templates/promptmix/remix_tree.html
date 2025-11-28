@@ -1,0 +1,26 @@
+<!-- promptmix/templates/promptmix/remix_tree.html -->
+<!-- Cody Headings, codyh@bu.edu 11/27/25 -->
+<!-- Recursive page for displaying many remixes in a chain -->
+
+<div class="remix">
+    <strong>
+        Re: {{subject}}
+    </strong>
+    <p class="info">
+        <a href="{% url 'show_profile' remix.profile.pk %}">
+            {{ remix.profile }}
+        </a> 
+        | {{ remix.timestamp }}
+    </p>
+
+    <p>{{ remix.text }}</p>
+    <hr>
+
+    {% if remix.child_remix.all %}
+        <div class="children">
+            {% for child in remix.child_remix.all %}
+                {% include "promptmix/remix_tree.html" with remix=child subject="Re: "|add:subject%}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

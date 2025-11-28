@@ -1,0 +1,27 @@
+<!-- promptmix/templates/promptmix/show_prompt.html -->
+<!-- Cody Headings, codyh@bu.edu 11/25/25 -->
+<!-- html page for singular view of Prompt object -->
+{% extends 'promptmix/base.html' %}
+
+{% block content %}
+<main class="container">
+<table>
+    <tr>
+        <h3>{{prompt.subject}}</h3>
+        <hr>
+        <p>{{prompt.text}}</p>
+        <p class="info">Posted by <a href="{% url 'show_profile' prompt.profile.pk %}">{{prompt.profile}}</a> on {{prompt.timestamp}}</p>
+    </tr>
+</table>
+</main>
+
+<main class="container">
+<div>
+    <!-- <h3><a href="{ url 'create_remix' prompt.pk }">Remix this</a></h3> -->
+    {% for remix in prompt.get_all_remixes %}
+        {% include "promptmix/remix_tree.html" with remix=remix subject=remix.prompt.subject%}
+    {% endfor %}
+</div>
+</main>
+
+{% endblock %}

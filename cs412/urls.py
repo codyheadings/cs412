@@ -30,6 +30,7 @@ urlpatterns = [
     path("marathon_analytics/", include("marathon_analytics.urls")),
     path("voter_analytics/", include("voter_analytics.urls")),
     path("dadjokes/", include("dadjokes.urls")),
+    path("promptmix/", include("promptmix.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
