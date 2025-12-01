@@ -52,6 +52,8 @@ class Prompt(models.Model):
     """Model that represents a single posted prompt for a Profile."""
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE) 
     # TODO: Change delete behavior, cascade isn't desired in this situation
+    # We want to check if there are any remixes of this prompt, if not delete it
+    # But if so, we want to keep it up but lock the thread to new replies
     timestamp = models.DateTimeField(auto_now_add=True)
     subject = models.TextField(blank=False)
     text = models.TextField(blank=False)
@@ -64,43 +66,15 @@ class Prompt(models.Model):
     #     """Return a URL to display one instance of this model."""
     #     return reverse('show_post', kwargs={'pk': self.pk})
     
-    # def has_photos(self):
-    #     """Return true if post has photos, false otherwise"""
-    #     photos = Photo.objects.filter(post=self)
-    #     return len(photos)>0
-    
-    # def get_all_photos(self):
-    #     """Return a QuerySet of Photos attached to this Post."""
-    #     photos = Photo.objects.filter(post=self)
-    #     return photos
-    
     def get_all_remixes(self):
-        """Return a QuerySet of Remixes attached to this Prompt."""
-        remixes = Remix.objects.filter(prompt=self)
+        """Return a QuerySet of all Remixes directly attached to this Prompt."""
+        remixes = Remix.objects.filter(prompt=self, remix__isnull=True)
         return remixes
     
     # def get_all_likes(self):
     #     """Return a QuerySet of Likes on this Post."""
     #     likes = Like.objects.filter(post=self).order_by('-timestamp')
     #     return likes
-    
-    # def display_likes(self):
-    #     """Displays the Post's Likes in a friendly way."""
-    #     likes = self.get_all_likes()
-    #     total_likes = len(likes)
-
-    #     if total_likes == 0:
-    #         return "Be the first to like this post!"
-    #     elif total_likes == 1:
-    #         return f"Liked by {likes.first().profile}"
-    #     elif total_likes == 2:
-    #         first = likes[0]
-    #         second = likes[1]
-    #         return f"Liked by {first.profile} and {second.profile}"
-    #     else:
-    #         first_like = likes.first()
-    #         others = total_likes - 1
-    #         return f"Liked by {first_like.profile} and {others} others"
             
 class Follow(models.Model):
     """
@@ -118,7 +92,7 @@ class Follow(models.Model):
 class Remix(models.Model):
     """Model that represents a reply to a Prompt or other Remix."""
     prompt = models.ForeignKey(Prompt, on_delete=models.CASCADE, blank=True, null=True, related_name='remixed_prompt')
-    remix = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='child_remix')
+    remix = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='children')
     # TODO: Change delete behavior, cascade isn't desired in this situation
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -126,10 +100,10 @@ class Remix(models.Model):
 
     def __str__(self):
         """Return string representation of this comment."""
-        if self.prompt:
-            post = self.prompt
-        else:
+        if self.remix:
             post = self.remix
+        else:
+            post = self.prompt
         return f"Re: {post}"
     
 class Boost(models.Model):

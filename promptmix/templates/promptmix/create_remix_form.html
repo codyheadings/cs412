@@ -1,0 +1,43 @@
+<!-- promptmix/templates/promptmix/create_remix_form.html -->
+<!-- Cody Headings, codyh@bu.edu, 11/30/25 -->
+<!-- html page dedicated to creating new remixes for a user -->
+ 
+{% extends 'promptmix/base.html' %}
+{% block content %}
+
+<div class="grid-container">
+    <div>
+        <h1>Create a new Prompt</h1>
+
+        {% if parent %}
+            <p>Remixing: <strong>{{ parent.profile }}</strong>:</p>
+            <blockquote>{{ parent.text }}</blockquote>
+            <form action="{% url 'show_prompt' parent.pk %}" method="GET">
+                <input class="button" type='submit' value= 'Cancel'>
+            </form>
+        {% else %}
+            <p>Remixing: <strong>{{ prompt.subject }}</strong></p>
+            <blockquote>{{ prompt.text }}</blockquote>
+            <form action="{% url 'show_prompt' prompt.pk %}" method="GET">
+                <input class="button" type='submit' value= 'Cancel'>
+            </form>
+        {% endif %}
+
+        <!-- display the HTML form -->
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+
+            <div>
+                {{ form.text.label_tag }}
+                {{ form.text }}
+                {{ form.text.errors }}
+            </div>
+
+            <button type="submit">Remix</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

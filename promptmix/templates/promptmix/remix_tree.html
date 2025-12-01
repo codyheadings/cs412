@@ -16,9 +16,9 @@
     <p>{{ remix.text }}</p>
     <hr>
 
-    {% if remix.child_remix.all %}
+    {% if remix.children.all %}
         <div class="children">
-            {% for child in remix.child_remix.all %}
+            {% for child in remix.children.all %}
                 {% include "promptmix/remix_tree.html" with remix=child subject="Re: "|add:subject%}
             {% endfor %}
         </div>

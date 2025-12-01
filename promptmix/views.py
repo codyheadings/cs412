@@ -2,6 +2,7 @@
 # author: Cody Headings, codyh@bu.edu, 11/25/2025
 # desc: view functions to return html renders
 
+from promptmix.forms import *
 from .models import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.db.models import Q
@@ -25,67 +26,101 @@ class PromptDetailView(DetailView):
     template_name = 'promptmix/show_prompt.html'
     context_object_name = 'prompt'
 
-# class CreatePromptView(CreateView):
-#     '''A view to create a new prompt and save it to the database.'''
+class CreatePromptView(CreateView):
+    '''A view to create a new prompt and save it to the database.'''
  
-#     form_class = CreatePromptForm
-#     template_name = "promptmix/create_prompt_form.html"
+    form_class = CreatePromptForm
+    template_name = "promptmix/create_prompt_form.html"
 
-#     def get_object(self):
-#         """Override default method to get object from current user."""
+    # def get_object(self):
+    #     """Override default method to get object from current user."""
 
-#         # find the logged in user
-#         user = self.request.user
+    #     # find the logged in user
+    #     user = self.request.user
 
-#         profile = Profile.objects.get(user=user)
+    #     profile = Profile.objects.get(user=user)
 
-#         return profile
+    #     return profile
 
-#     def get_context_data(self):
-#         '''Return the dictionary of context variables for use in the template.'''
-#         # calling the superclass method
-#         context = super().get_context_data()
+    def get_context_data(self):
+        '''Return the dictionary of context variables for use in the template.'''
+        # calling the superclass method
+        context = super().get_context_data()
  
-#         # find/add the profile to the context data
-#         # retrieve the PK from the URL pattern
-#         # pk = self.kwargs['pk']
-#         profile = self.get_object()
+        # find/add the profile to the context data
+        # retrieve the PK from the URL pattern
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
  
-#         # add this profile into the context dictionary:
-#         context['profile'] = profile
-#         return context
+        # add this profile into the context dictionary:
+        context['profile'] = profile
+        return context
  
-#     def form_valid(self, form):
-#         '''This method handles the form submission and saves the 
-#         new object to the Django database.
-#         Adds the foreign key (of the Profile) to the Prompt
-#         object before saving it to the database.
-#         '''
+    def form_valid(self, form):
+        '''This method handles the form submission and saves the 
+        new object to the Django database.
+        Adds the foreign key (of the Profile) to the Prompt
+        object before saving it to the database.
+        '''
  
-# 		# instrument our code to display form fields: 
-#         print(f"CreatePromptView.form_valid: cleaned_data={form.cleaned_data}")
+		# instrument our code to display form fields: 
+        print(f"CreatePromptView.form_valid: cleaned_data={form.cleaned_data}")
         
-#         # retrieve the PK from the URL pattern
-#         pk = self.kwargs['pk']
-#         profile = Profile.objects.get(pk=pk)
-#         # attach this profile to the prompt
-#         form.instance.profile = profile # set the FK
-
-#         # image_url = self.request.POST.get("image_url")  # grab URL from form
-#         # if image_url:
-#         #     Photo.objects.create(prompt=form.instance, image_url=image_url)
-
-#         self.object = form.save()
-#         files = self.request.FILES.getlist('image_file')
-#         for f in files:
-#             Photo.objects.create(prompt=form.instance, image_file=f)
+        # retrieve the PK from the URL pattern
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+        # attach this profile to the prompt
+        form.instance.profile = profile # set the FK
  
-#         # delegate the work to the superclass method form_valid:
-#         return super().form_valid(form)
+        # delegate the work to the superclass method form_valid:
+        return super().form_valid(form)
     
-#     def get_success_url(self):
-#         """Redirects to new prompt page after successful creation."""
-#         return reverse('show_prompt', kwargs={'pk':self.object.pk})
+    def get_success_url(self):
+        """Redirects to new prompt page after successful creation."""
+        return reverse('show_prompt', kwargs={'pk':self.object.pk})
+    
+class CreateRemixView(CreateView):
+    '''A view to create a new Remix and save it to the database.'''
+ 
+    form_class = CreateRemixForm
+    template_name = "promptmix/create_remix_form.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        """Determine whether user is remixing a prompt or another remix."""
+        
+        self.prompt = None
+        self.remix = None
+
+        if "prompt_id" in kwargs:
+            self.prompt = Prompt.objects.get(pk=kwargs["prompt_id"])
+
+        if "remix_id" in kwargs:
+            self.remix = Remix.objects.get(pk=kwargs["remix_id"])
+            self.prompt = self.remix.prompt
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        """Add all other fields not entered by user in the form."""
+        remix = form.save(commit=False)
+        remix.profile = Profile.objects.first()
+        remix.prompt = self.prompt
+        remix.remix = self.remix
+        remix.save()
+
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        """Redirects to new prompt page after successful creation."""
+        return reverse('show_prompt', kwargs={'pk':self.prompt.pk})
+    
+    def get_context_data(self, **kwargs):
+        '''Return the dictionary of context variables for use in the template.'''
+        # calling the superclass method
+        context = super().get_context_data(**kwargs)
+        context["prompt"] = self.prompt
+        context["parent"] = self.remix
+        return context
     
 # class UpdateProfileView(LoginRequiredMixin, UpdateView):
 #     """View class to handle update of a profile based on its pk."""
