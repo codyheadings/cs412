@@ -18,9 +18,21 @@
 <main class="container">
 <div>
     <!-- <h3><a href="{ url 'create_remix' prompt.pk }">Remix this</a></h3> -->
-    {% for remix in prompt.get_all_remixes %}
+    {% for remix in prompt.get_all_remixes|slice:":2" %}
         {% include "promptmix/remix_tree.html" with remix=remix subject=remix.prompt.subject%}
     {% endfor %}
+
+    {% if prompt.get_all_remixes|length > 2 %}
+        <div class="show-more" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">
+            Show {{ prompt.get_all_remixes|length|add:"-2" }} more remixes...
+        </div>
+
+        <div style="display:none;">
+            {% for remix in prompt.get_all_remixes|slice:"2:" %}
+                {% include "promptmix/remix_tree.html" with remix=remix subject=remix.prompt.subject%}
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 </main>
 

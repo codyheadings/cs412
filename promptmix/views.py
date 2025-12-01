@@ -181,36 +181,56 @@ class CreateRemixView(CreateView):
 #         # reverse to show the profile page
 #         return reverse('show_profile', kwargs={'pk':profile.pk})
 
-# class PromptFeedListView(ListView):
-#     """Create a subclass of ListView to display prompt feed for a profile."""
+class PromptFeedListView(ListView):
+    """Create a subclass of ListView to display prompt feed for a profile."""
     
-#     model = Prompt
-#     template_name = 'promptmix/show_feed.html'
-#     context_object_name = 'prompts'
+    model = Prompt
+    template_name = 'promptmix/show_feed.html'
+    context_object_name = 'prompts'
+    paginate_by = 10
 
-#     def get_object(self):
-#         """Override default method to get object from current user."""
+    # def get_object(self):
+    #     """Override default method to get object from current user."""
 
-#         # find the logged in user
-#         user = self.request.user
+    #     # find the logged in user
+    #     user = self.request.user
 
-#         profile = Profile.objects.get(user=user)
+    #     profile = Profile.objects.get(user=user)
 
-#         return profile
+    #     return profile
 
-#     def get_queryset(self):
-#         """Return the feed prompts from followed profiles."""
-#         profile = Profile.objects.get(user=self.request.user)
-#         return profile.get_prompt_feed()
+    def get_queryset(self):
+        """Return the feed prompts from the database."""
+        # TODO: Add alternate sorting options for main feed
+        prompts = super().get_queryset()
 
-#     def get_context_data(self, **kwargs):
-#         """Add the profile object to the context data."""
-#         context = super().get_context_data(**kwargs)
+        if 'keywords' in self.request.GET:
+            keywords = self.request.GET['keywords']
+            if keywords:
+                prompts = prompts.filter(Q(subject__icontains=keywords) | Q(text__icontains=keywords))
 
-#         profile = self.get_object()
+        if 'sort' in self.request.GET:
+            sort = self.request.GET['sort']
+            if sort=="newest":
+                prompts = prompts.order_by('-timestamp')
+            elif sort=="oldest":
+                prompts = prompts.order_by('timestamp')
+            else:
+                # TODO: fix when boosts are implemented
+                prompts = prompts.order_by('-timestamp')
 
-#         context['profile'] = profile
-#         return context
+        return prompts
+
+    def get_context_data(self, **kwargs):
+        """Add the profile object to the context data."""
+        context = super().get_context_data(**kwargs)
+
+        # pk = self.kwargs['pk']
+        # profile = Profile.objects.get(pk=pk)
+
+        # context['profile'] = profile
+        context["get_request"] = self.request.GET
+        return context
     
 # class CreateProfileView(CreateView):
 #     """A view to create a new profile and save it to the database."""

@@ -18,9 +18,21 @@
 
     {% if remix.children.all %}
         <div class="children">
-            {% for child in remix.children.all %}
+            {% for child in remix.children.all|slice:":1" %}
                 {% include "promptmix/remix_tree.html" with remix=child subject="Re: "|add:subject%}
             {% endfor %}
+
+            {% if remix.children.all|length > 1 %}
+                <div class="show-more" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">
+                    Show {{ remix.children.all|length|add:"-1" }} more remixes...
+                </div>
+
+                <div style="display:none;">
+                    {% for child in remix.children.all|slice:"1:" %}
+                        {% include "promptmix/remix_tree.html" with remix=child subject="Re: "|add:subject%}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
     {% endif %}
 </div>

@@ -38,16 +38,6 @@ class Profile(models.Model):
     #     numposts = len(Post.objects.filter(profile=self))
     #     return numposts
     
-    # def get_post_feed(self):
-    #     """Returns a list of posts personalized for the profile."""
-    #     posts = []
-    #     followed_profiles = self.get_following()
-    #     for profile in followed_profiles:
-    #         posts += profile.get_all_posts()
-
-    #     posts.sort(key=lambda post: post.timestamp, reverse=True)
-    #     return posts
-    
 class Prompt(models.Model):
     """Model that represents a single posted prompt for a Profile."""
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE) 

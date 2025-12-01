@@ -1,0 +1,66 @@
+<!-- promptmix/templates/promptmix/show_feed.html -->
+<!-- Cody Headings, codyh@bu.edu 12/01/25 -->
+<!-- html page for list view of prompt feed for a profile -->
+
+{% extends 'promptmix/base.html' %}
+
+{% block content %}
+<main class="feed-container">
+    <h1 class="center">Feed</h1>
+
+    {% include "promptmix/search.html" %}
+
+    {% if prompts %}
+    {% for prompt in prompts %}
+        <article class="feed-post">
+            <div class="feed-header">
+                <a href="{% url 'show_profile' prompt.profile.pk %}">
+                    {% if prompt.profile.profile_image_url %}
+                        <img src="{{ prompt.profile.profile_image_url }}" 
+                        alt="{{ prompt.profile.username }}" 
+                        class="feed-profile-pic">
+                    {% else %}
+                        <img src="https://cs-webapps.bu.edu/codyh/media/NoImage.png" 
+                        alt="No Profile Image" 
+                        class="feed-profile-pic">
+                    {% endif %}
+                </a>
+                <div class="feed-user-info">
+                    <a href="{% url 'show_profile' prompt.profile.pk %}" class="username">
+                        {{prompt.profile}}
+                    </a>
+                    <span class="timestamp">{{prompt.timestamp}}</span>
+                </div>
+            </div>
+
+            <div class="feed-caption">
+                <!-- <p class="likes">{{prompt.display_likes}}</p> -->
+                <strong>{{prompt.subject}}</strong>
+                <p>{{prompt.text}}</p>
+                <hr>
+            </div>
+
+            <div>
+                {% for remix in prompt.get_all_remixes|slice:":2" %}
+                    {% include "promptmix/remix_tree.html" with remix=remix subject=remix.prompt.subject%}
+                {% endfor %}
+
+                {% if prompt.get_all_remixes|length > 2 %}
+                    <div class="show-more" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">
+                        Show {{ prompt.get_all_remixes|length|add:"-2" }} more remixes...
+                    </div>
+
+                    <div style="display:none;">
+                        {% for remix in prompt.get_all_remixes|slice:"2:" %}
+                            {% include "promptmix/remix_tree.html" with remix=remix subject=remix.prompt.subject%}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </article>
+    {% endfor %}
+    {% else %}
+        <p>No posts found. Try searching for something less specific.</p>
+    {% endif %}
+</main>
+{% endblock %}
