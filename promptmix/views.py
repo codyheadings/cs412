@@ -187,7 +187,7 @@ class PromptFeedListView(ListView):
     model = Prompt
     template_name = 'promptmix/show_feed.html'
     context_object_name = 'prompts'
-    paginate_by = 10
+    paginate_by = 5
 
     # def get_object(self):
     #     """Override default method to get object from current user."""

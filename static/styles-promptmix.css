@@ -1,6 +1,6 @@
 body {
-    margin: 30px;
-    background-color: #f8fafc;
+    margin: 0;
+    background-color: #37373a;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding-bottom: 60px;
 }
@@ -10,8 +10,12 @@ ul, li {
     list-style-type: none;
 }
 
-h1, h2, h3 {
-    color: #767f7e;
+h1 {
+  color: #ccc;
+}
+
+h2, h3 {
+    color: #484e4e;
 }
 
 a {
@@ -23,11 +27,11 @@ p {
 }
 
 header {
-    max-width: 1200px;
-    margin: 40px auto;
-    border-bottom: 1px solid #e2e8f0;
+    max-width: 100%;
+    margin: auto;
+    border-bottom: 1px solid #505255;
     text-align: center;
-    background-color: #fff;
+    background-color: #656668;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
@@ -46,7 +50,7 @@ footer {
 
 .container,
 .grid-container {
-  max-width: 1000px;
+  max-width: 75%;
   margin: 20px auto;
   padding: 1rem;
 }
@@ -57,16 +61,21 @@ footer {
   gap: 20px;
 }
 
-.post-thumbnail {
-  width: 100%;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+.prompt-container {
+  max-width: 75%;
+  margin: 20px auto;
 }
 
-.post-thumbnail:hover {
-  transform: scale(1.015);
+.prompt {
+  max-width: 100%;
+  background: #f1f1f1;
+  padding: 15px;
+  border-radius: 25px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.feed-post:hover {
+  transform: scale(1.0025);
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
@@ -101,21 +110,6 @@ profile h2 {
   margin: 4px 0 12px 0;
 }
 
-.grid-container-2 {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.grid-container-2 div h3 {
-  font-size: 0.9rem;
-  margin-bottom: 0.2rem;
-  color: #648b75;
-}
-
-.grid-container-2 p {
-  font-weight: 600;
-}
-
 .footer-wrapper {
     display: flex;
     flex-direction: row;
@@ -127,14 +121,6 @@ profile h2 {
 
 td {
     padding-top: 5px;
-}
-
-.postpic,
-.postpic-noimage {
-  width: 100%;
-  object-fit: cover;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .center {
@@ -150,29 +136,19 @@ td {
     text-decoration: none;
     font-size: 0.95rem;
     transition: background-color 0.25s ease, transform 0.15s ease, box-shadow 0.2s ease;
-    box-shadow: 0 2px 6px rgba(37, 235, 159, 0.25);
+    box-shadow: 0 2px 6px rgba(16, 102, 69, 0.25);
 }
 
 .button:hover,
 .button:focus {
   background-color: #25a55f;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(37, 235, 159, 0.25);
+  box-shadow: 0 4px 12px rgba(16, 102, 69, 0.25);
 }
 
 .button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(37, 235, 159, 0.25);
-}
-
-.postpic {
-    width: 586px;
-    padding: 7px;
-}
-
-.postpic-noimage {
-    width: 250px;
-    padding: 7px;
+  box-shadow: 0 2px 6px rgba(16, 102, 69, 0.25);
 }
 
 .post-thumbnail {
@@ -205,9 +181,9 @@ a {
 }
 
 .feed-container {
-    max-width: 700px;
+    max-width: 60%;
     margin: 20px auto;
-    background: #fafafa;
+    background: #f1f1f1;
     padding: 20px;
     border-radius: 16px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
@@ -219,6 +195,7 @@ a {
     padding: 16px;
     margin-bottom: 25px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .feed-header {
@@ -229,9 +206,9 @@ a {
 }
 
 .feed-profile-pic {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    border-radius: 25%;
     object-fit: cover;
 }
 
@@ -240,6 +217,14 @@ a {
     flex-direction: column;
     line-height: 1.2;
     text-align: left;
+}
+
+.subject {
+  font-size: large;
+}
+
+.show-more {
+  max-width: 20%;
 }
 
 .username {

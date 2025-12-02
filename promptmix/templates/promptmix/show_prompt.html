@@ -4,15 +4,19 @@
 {% extends 'promptmix/base.html' %}
 
 {% block content %}
-<main class="container">
-<table>
-    <tr>
-        <h3>{{prompt.subject}}</h3>
-        <hr>
-        <p>{{prompt.text}}</p>
-        <p class="info">Posted by <a href="{% url 'show_profile' prompt.profile.pk %}">{{prompt.profile}}</a> on {{prompt.timestamp}}</p>
-    </tr>
-</table>
+<main class="prompt-container">
+    <div class="prompt">
+        <table>
+            <tr>
+                <h3>{{prompt.subject}}</h3>
+                <hr>
+                <p>{{prompt.text}}</p>
+                <p class="info">Posted by <a href="{% url 'show_profile' prompt.profile.pk %}">{{prompt.profile}}</a> on {{prompt.timestamp}}</p>
+                <!-- add count of remixes and boosts -->
+                <p class="info">0 Boosts | {{ prompt.get_all_remixes|length }} Remixes</p>
+            </tr>
+        </table>
+    </div>
 </main>
 
 <main class="container">
@@ -24,7 +28,7 @@
 
     {% if prompt.get_all_remixes|length > 2 %}
         <div class="show-more" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">
-            Show {{ prompt.get_all_remixes|length|add:"-2" }} more remixes...
+            Show {{ prompt.get_all_remixes|length|add:"-2" }} more {% if remix.children.all|length|add:"-2" == 1%}Remix{%else%}Remixes{%endif%}...
         </div>
 
         <div style="display:none;">
