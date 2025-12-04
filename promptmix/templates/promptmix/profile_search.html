@@ -1,0 +1,30 @@
+<!-- promptmix/templates/promptmix/search.html -->
+<!-- Cody Headings, codyh@bu.edu 12/04/25 -->
+<!-- html form page for filtering/sorting profile prompts -->
+
+<table class="search">
+<form action="{% url 'show_profile' profile.pk %}">
+    <tr>
+        <th>Search Keywords:</th>
+        <td>
+            <input type="text" name="keywords" {% if get_request.keywords%}value="{{get_request.keywords}}"{% endif %}>
+        </td>
+    </tr>
+    <tr>
+        <th>Sort By:</th>
+        <td><select name="sort">
+            <option value="popular" {% if get_request.sort == "popular" %}selected{% endif %}>Most Popular</option>
+            <option value="unpopular" {% if get_request.sort == "unpopular" %}selected{% endif %}>Least Popular</option>
+            <option value="newest" {% if get_request.sort == "newest" %}selected{% endif %}>Newest</option>
+            <option value="oldest" {% if get_request.sort == "oldest" %}selected{% endif %}>Oldest</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td><input type="submit"></td>
+    </tr>
+</form>
+</table>
+
+<form action="{% url 'show_profile' profile.pk%}">
+    <input type="submit" value="Cancel">
+</form>

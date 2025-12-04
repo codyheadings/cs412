@@ -19,6 +19,35 @@ class ProfileDetailView(DetailView):
     template_name = 'promptmix/show_profile.html'
     context_object_name = 'profile'
 
+    def get_context_data(self, **kwargs):
+        """Add the profile object to the context data."""
+        context = super().get_context_data(**kwargs)
+        context["get_request"] = self.request.GET
+
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+
+        prompts = profile.get_all_prompts()
+
+        if 'keywords' in self.request.GET:
+            keywords = self.request.GET['keywords']
+            if keywords:
+                prompts = prompts.filter(Q(subject__icontains=keywords) | Q(text__icontains=keywords))
+
+        if 'sort' in self.request.GET:
+            sort = self.request.GET['sort']
+            if sort=="newest":
+                prompts = prompts.order_by('-timestamp')
+            elif sort=="oldest":
+                prompts = prompts.order_by('timestamp')
+            else:
+                # TODO: fix when boosts are implemented
+                prompts = prompts.order_by('-timestamp')
+
+        context["prompts"] = prompts
+
+        return context
+
 class PromptDetailView(DetailView):
     """Subclass of DetailView to display a single prompt page."""
     

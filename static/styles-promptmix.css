@@ -61,6 +61,22 @@ footer {
   gap: 20px;
 }
 
+.grid-container-2 {
+  display: flex;
+  text-align: right;
+  gap: 1.5rem;
+}
+
+.grid-container-2 div h3 {
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+  color: #648b75;
+}
+
+.grid-container-2 p {
+  font-weight: 600;
+}
+
 .prompt-container {
   max-width: 75%;
   margin: 20px auto;
@@ -75,7 +91,7 @@ footer {
 }
 
 .feed-post:hover {
-  transform: scale(1.0025);
+  transform: scale(1.001);
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
@@ -92,11 +108,10 @@ profile {
 }
 
 profile img {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
+  width: 128px;
+  height: 128px;
+  border-radius: 25%;
   object-fit: cover;
-  padding-right: 10px;
 }
 
 profile h1 {
@@ -135,7 +150,7 @@ td {
     color: white;
     text-decoration: none;
     font-size: 0.95rem;
-    transition: background-color 0.25s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    transition: background-color 0.25s ease, transform 0.1s ease, box-shadow 0.2s ease;
     box-shadow: 0 2px 6px rgba(16, 102, 69, 0.25);
 }
 

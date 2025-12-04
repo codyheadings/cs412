@@ -18,32 +18,36 @@ class Profile(models.Model):
         '''Return a string representation of this Profile object.'''
         return f'{self.display_name}'
     
-    # May be useful later
-    # def get_absolute_url(self):
-    #     """Return a URL to display one instance of this model."""
-    #     return reverse('show_profile', kwargs={'pk': self.pk})
+    def get_absolute_url(self):
+        """Return a URL to display one instance of this model."""
+        return reverse('show_profile', kwargs={'pk': self.pk})
     
-    # def has_posts(self):
-    #     """Return true if user has posts, false otherwise"""
-    #     posts = Post.objects.filter(profile=self)
-    #     return len(posts)>0
+    def has_prompts(self):
+        """Return true if user has prompts, false otherwise"""
+        prompts = Prompt.objects.filter(profile=self)
+        return len(prompts)>0
     
-    # def get_all_posts(self):
-    #     """Return a QuerySet of Posts from this user."""
-    #     posts = Post.objects.filter(profile=self).order_by('-timestamp')
-    #     return posts
+    def get_all_prompts(self):
+        """Return a QuerySet of Prompts from this user."""
+        prompts = Prompt.objects.filter(profile=self)
+        return prompts
     
-    # def get_post_count(self):
-    #     """Return number of Posts from this user."""
-    #     numposts = len(Post.objects.filter(profile=self))
-    #     return numposts
+    def get_prompt_count(self):
+        """Return number of Prompts from this user."""
+        numprompts = len(Prompt.objects.filter(profile=self))
+        return numprompts
+    
+    def get_remix_count(self):
+        """Return number of Remixes from this user."""
+        numremixes = len(Remix.objects.filter(profile=self))
+        return numremixes
     
 class Prompt(models.Model):
     """Model that represents a single posted prompt for a Profile."""
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE) 
     # TODO: Change delete behavior, cascade isn't desired in this situation
     # We want to check if there are any remixes of this prompt, if not delete it
-    # But if so, we want to keep it up but lock the thread to new replies
+    # But if so, we want to archive it and lock the thread to new replies
     timestamp = models.DateTimeField(auto_now_add=True)
     subject = models.TextField(blank=False)
     text = models.TextField(blank=False)
