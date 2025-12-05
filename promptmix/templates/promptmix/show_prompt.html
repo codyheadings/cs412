@@ -13,15 +13,15 @@
                 <p>{{prompt.text}}</p>
                 <p class="info">Posted by <a href="{% url 'show_profile' prompt.profile.pk %}">{{prompt.profile}}</a> on {{prompt.timestamp}}</p>
                 <!-- add count of remixes and boosts -->
-                <p class="info">0 Boosts | {{ prompt.get_all_remixes|length }} Remixes</p>
+                <p class="info">{{ prompt.get_all_boosts|length }} Boosts | {{ prompt.get_all_remixes|length }} Remixes</p>
             </tr>
         </table>
+        <a href="{% url 'create_prompt_remix' prompt.pk %}" class="button">Remix this!</a>
     </div>
 </main>
 
 <main class="container">
 <div>
-    <!-- <h3><a href="{ url 'create_remix' prompt.pk }">Remix this</a></h3> -->
     {% for remix in prompt.get_all_remixes|slice:":2" %}
         {% include "promptmix/remix_tree.html" with remix=remix subject=remix.prompt.subject%}
     {% endfor %}

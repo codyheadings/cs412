@@ -18,6 +18,14 @@
             <p>Joined {{profile.join_date}}</p>
         </div>
 
+        </div>
+        {% if profile.user == request.user %}
+        <div>
+            <a class="button" href="{% url 'update_profile' %}">
+                Update Profile</a>
+        </div>
+        {% endif %}
+
         <div class="grid-container-2" style="margin-left: auto;">
             <div>
                 <h3>Prompts:</h3>
@@ -27,8 +35,6 @@
                 <h3>Remixes:</h3>
                 <p>{{profile.get_remix_count}}</p>
             </div>
-        </div>
-        
     </profile>
 </main>
 <main class="feed-container">
@@ -66,7 +72,7 @@
                         <hr>
                         <!-- add count of remixes and boosts -->
                         <div style="display: flex; justify-content: space-between;">
-                            <p class="info">0 Boosts</p>
+                            <p class="info">{{ prompt.get_all_boosts|length }} Boosts</p>
                             <a class="prompt-link" href="{% url 'show_prompt' prompt.pk%}"><p class="info">{{ prompt.get_all_remixes|length }} Remixes</p></a>
                         </div>
                     </div>

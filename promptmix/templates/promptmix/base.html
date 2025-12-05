@@ -15,8 +15,40 @@
                 <ul>
                     <!-- Add some nav options here -->
                     <li><a href="{% url 'show_feed' %}" class="button">Feed</a></li>
+                    {% if request.user.is_authenticated %}
+                    {% if profile %}
+                    {% if profile.user == request.user %}
+                    <li><a class="button" href="{% url 'create_prompt' %}">
+                        Create a Prompt
+                    </a></li>
+                    {% endif %}
+                    <li><a class="button" href="{% url 'show_profile' profile.pk%}">
+                        Profile
+                    </a></li>
+                    {% endif %}
+                    {% endif %}
+                    {% if request.user.is_authenticated %}
+                    <form method="post" action="{% url 'logout' %}" >
+                        {% csrf_token %}
+                        <li><input type="submit" value="Logout" class="button"></li>
+                    </form>
+                    {% else %}
+                    <li><a class="button" href="{% url 'login' %}">
+                        Login
+                    </a></li>
+                    <li><a class="button" href="{% url 'create_profile' %}">
+                        Create Profile
+                    </a></li>
+                    {% endif %}
                 </ul>
             </nav>
+            <div>
+                {% if request.user.is_authenticated %}
+                <p>Currently logged in as: {{request.user}}</p>
+                {% else %}
+                <p>Currently not logged in.</p>
+                {% endif %}
+            </div>
         </header>
         
         {% block content %}

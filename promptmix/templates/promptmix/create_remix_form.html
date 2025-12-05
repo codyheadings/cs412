@@ -12,7 +12,7 @@
         {% if parent %}
             <p>Remixing: <strong>{{ parent.profile }}</strong>:</p>
             <blockquote>{{ parent.text }}</blockquote>
-            <form action="{% url 'show_prompt' parent.pk %}" method="GET">
+            <form action="{% url 'show_prompt' prompt.pk %}" method="GET">
                 <input class="button" type='submit' value= 'Cancel'>
             </form>
         {% else %}

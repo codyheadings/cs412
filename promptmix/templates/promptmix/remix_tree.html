@@ -15,7 +15,11 @@
 
     <p>{{ remix.text }}</p>
     <hr>
-    <p class="info">0 Boosts | {{ remix.children.all|length }} {% if remix.children.all|length == 1%}Remix{%else%}Remixes{%endif%}</p>
+    <p class="info">{{ remix.get_all_boosts|length }} Boosts | {{ remix.children.all|length }} {% if remix.children.all|length == 1%}Remix{%else%}Remixes{%endif%}</p>
+
+    {% if prompt_page %}
+        <a href="{% url 'create_remix_remix' remix.pk %}" class="button">Remix this!</a>
+    {% endif %}
 
     {% if remix.children.all %}
         <div class="children">

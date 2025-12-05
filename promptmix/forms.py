@@ -36,10 +36,10 @@ class UpdatePromptForm(forms.ModelForm):
         model=Prompt
         fields = ["subject", "text"]
 
-# class CreateProfileForm(forms.ModelForm):
-#     """A form to create a new profile in the database."""
+class CreateProfileForm(forms.ModelForm):
+    """A form to create a new profile in the database."""
 
-#     class Meta:
-#         """Associate this form with a model from the database"""
-#         model=Profile
-#         fields = ["username", "display_name", "bio_text", "profile_image_url"]
+    class Meta:
+        """Associate this form with a model from the database"""
+        model=Profile
+        fields = ["display_name", "profile_image_url"]

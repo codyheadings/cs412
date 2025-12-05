@@ -55,21 +55,33 @@ class PromptDetailView(DetailView):
     template_name = 'promptmix/show_prompt.html'
     context_object_name = 'prompt'
 
-class CreatePromptView(CreateView):
+    def get_context_data(self, **kwargs):
+        '''Return the dictionary of context variables for use in the template.'''
+        # calling the superclass method
+        context = super().get_context_data()
+ 
+        context['prompt_page'] = "TRUE"
+        return context
+
+class CreatePromptView(LoginRequiredMixin, CreateView):
     '''A view to create a new prompt and save it to the database.'''
  
     form_class = CreatePromptForm
     template_name = "promptmix/create_prompt_form.html"
 
-    # def get_object(self):
-    #     """Override default method to get object from current user."""
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
 
-    #     # find the logged in user
-    #     user = self.request.user
+    def get_object(self):
+        """Override default method to get object from current user."""
 
-    #     profile = Profile.objects.get(user=user)
+        # find the logged in user
+        user = self.request.user
 
-    #     return profile
+        profile = Profile.objects.get(user=user)
+
+        return profile
 
     def get_context_data(self):
         '''Return the dictionary of context variables for use in the template.'''
@@ -77,9 +89,7 @@ class CreatePromptView(CreateView):
         context = super().get_context_data()
  
         # find/add the profile to the context data
-        # retrieve the PK from the URL pattern
-        pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=pk)
+        profile = self.get_object()
  
         # add this profile into the context dictionary:
         context['profile'] = profile
@@ -96,8 +106,7 @@ class CreatePromptView(CreateView):
         print(f"CreatePromptView.form_valid: cleaned_data={form.cleaned_data}")
         
         # retrieve the PK from the URL pattern
-        pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=pk)
+        profile = self.get_object()
         # attach this profile to the prompt
         form.instance.profile = profile # set the FK
  
@@ -108,31 +117,35 @@ class CreatePromptView(CreateView):
         """Redirects to new prompt page after successful creation."""
         return reverse('show_prompt', kwargs={'pk':self.object.pk})
     
-class CreateRemixView(CreateView):
+class CreateRemixView(LoginRequiredMixin, CreateView):
     '''A view to create a new Remix and save it to the database.'''
  
     form_class = CreateRemixForm
     template_name = "promptmix/create_remix_form.html"
 
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+
     def dispatch(self, request, *args, **kwargs):
         """Determine whether user is remixing a prompt or another remix."""
-        
-        self.prompt = None
-        self.remix = None
 
         if "prompt_id" in kwargs:
             self.prompt = Prompt.objects.get(pk=kwargs["prompt_id"])
+            self.remix = None
 
         if "remix_id" in kwargs:
             self.remix = Remix.objects.get(pk=kwargs["remix_id"])
-            self.prompt = self.remix.prompt
+            self.prompt = Prompt.objects.get(pk=self.remix.prompt.pk)
 
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         """Add all other fields not entered by user in the form."""
         remix = form.save(commit=False)
-        remix.profile = Profile.objects.first()
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+        remix.profile = profile
         remix.prompt = self.prompt
         remix.remix = self.remix
         remix.save()
@@ -151,26 +164,26 @@ class CreateRemixView(CreateView):
         context["parent"] = self.remix
         return context
     
-# class UpdateProfileView(LoginRequiredMixin, UpdateView):
-#     """View class to handle update of a profile based on its pk."""
+class UpdateProfileView(LoginRequiredMixin, UpdateView):
+    """View class to handle update of a profile based on its pk."""
 
-#     model = Profile
-#     form_class = UpdateProfileForm
-#     template_name = "promptmix/update_profile_form.html"
+    model = Profile
+    form_class = UpdateProfileForm
+    template_name = "promptmix/update_profile_form.html"
 
-#     def get_object(self):
-#         """Override default method to get object from current user."""
+    def get_object(self):
+        """Override default method to get object from current user."""
 
-#         # find the logged in user
-#         user = self.request.user
+        # find the logged in user
+        user = self.request.user
 
-#         profile = Profile.objects.get(user=user)
+        profile = Profile.objects.get(user=user)
 
-#         return profile
+        return profile
 
-#     def get_login_url(self) -> str:
-#         '''return the URL required for login'''
-#         return reverse('login')
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
 
 # class DeletePromptView(LoginRequiredMixin, DeleteView):
 #     '''A view to delete a Prompt and remove it from the database.'''
@@ -218,15 +231,18 @@ class PromptFeedListView(ListView):
     context_object_name = 'prompts'
     paginate_by = 5
 
-    # def get_object(self):
-    #     """Override default method to get object from current user."""
+    def get_object(self):
+        """Override default method to get object from current user."""
 
-    #     # find the logged in user
-    #     user = self.request.user
+        # find the logged in user
+        user = self.request.user
 
-    #     profile = Profile.objects.get(user=user)
+        if user.is_authenticated:
+            profile = Profile.objects.get(user=user)
+        else:
+            profile = None
 
-    #     return profile
+        return profile
 
     def get_queryset(self):
         """Return the feed prompts from the database."""
@@ -254,43 +270,42 @@ class PromptFeedListView(ListView):
         """Add the profile object to the context data."""
         context = super().get_context_data(**kwargs)
 
-        # pk = self.kwargs['pk']
-        # profile = Profile.objects.get(pk=pk)
+        profile = self.get_object()
 
-        # context['profile'] = profile
+        context['profile'] = profile
         context["get_request"] = self.request.GET
         return context
     
-# class CreateProfileView(CreateView):
-#     """A view to create a new profile and save it to the database."""
+class CreateProfileView(CreateView):
+    """A view to create a new profile and save it to the database."""
 
-#     form_class = CreateProfileForm
-#     template_name = "promptmix/create_profile_form.html"
+    form_class = CreateProfileForm
+    template_name = "promptmix/create_profile_form.html"
 
-#     def get_context_data(self):
-#         '''Return the dictionary of context variables for use in the template.'''
-#         context = super().get_context_data()
+    def get_context_data(self):
+        '''Return the dictionary of context variables for use in the template.'''
+        context = super().get_context_data()
  
-#         # add UserCreationForm into the context dictionary:
-#         context['user_form'] = UserCreationForm
-#         return context
+        # add UserCreationForm into the context dictionary:
+        context['user_form'] = UserCreationForm
+        return context
     
-#     def form_valid(self, form):
-#         '''Handles the form submission and saves the 
-#         new object to the Django database.
-#         '''
+    def form_valid(self, form):
+        '''Handles the form submission and saves the 
+        new object to the Django database.
+        '''
 
-#         print(f"CreateProfileView.form_valid: cleaned_data={form.cleaned_data}")
+        print(f"CreateProfileView.form_valid: cleaned_data={form.cleaned_data}")
         
-#         user_form = UserCreationForm(self.request.POST)
-#         user = user_form.save()
+        user_form = UserCreationForm(self.request.POST)
+        user = user_form.save()
 
-#         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
  
-#         form.instance.user = user
+        form.instance.user = user
 
-#         # delegate to the superclass method form_valid:
-#         return super().form_valid(form)
+        # delegate to the superclass method form_valid:
+        return super().form_valid(form)
     
 # class DeleteFollowView(LoginRequiredMixin, TemplateView):
 #     """A view to have the logged in user unfollow another user's profile."""

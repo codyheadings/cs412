@@ -39,7 +39,7 @@
                 <hr>
                 <!-- add count of remixes and boosts -->
                 <div style="display: flex; justify-content: space-between;">
-                    <p class="info">0 Boosts</p>
+                    <p class="info">{{ prompt.get_all_boosts|length }} Boosts</p>
                     <a class="prompt-link" href="{% url 'show_prompt' prompt.pk%}"><p class="info">{{ prompt.get_all_remixes|length }} Remixes</p></a>
                 </div>
             </div>

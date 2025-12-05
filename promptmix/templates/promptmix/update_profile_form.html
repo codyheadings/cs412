@@ -1,0 +1,36 @@
+<!-- promptmix/templates/promptmix/update_profile_form.html -->
+<!-- Cody Headings, codyh@bu.edu 12/04/2025 -->
+<!-- html page form for updating a user's profile -->
+{% extends 'promptmix/base.html' %}
+ 
+{% block content %}
+<main class="container">
+    <h2>Update Profile</h2>
+
+    <form method = 'POST' enctype="multipart/form-data">
+    {% csrf_token %}
+
+        <table>
+        <tr>
+            <th>Display Name:</th>
+            <td>{{form.display_name}}</td>
+        </tr>
+        <tr>
+            <th>Profile Image URL:</th>
+            <td>{{form.profile_image_url}}</td>
+        </tr>
+        <tr>
+            <td>
+                <input class="button" type='submit' name ='update_profile' 
+                value='Update Profile'>
+            </td>
+        </tr>
+        </table>
+    </form>
+
+    <form action="{% url 'show_profile' profile.pk %}" method="GET">
+        <input class="button" type='submit' value='Cancel'>
+    </form>
+</main>
+
+{% endblock %}

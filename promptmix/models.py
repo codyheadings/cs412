@@ -12,7 +12,7 @@ class Profile(models.Model):
     display_name = models.TextField(blank=False)
     join_date = models.DateTimeField(auto_now_add=True)
     profile_image_url = models.URLField(blank=True)
-    # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='promptmix_profile')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='promptmix_profile')
 
     def __str__(self):
         '''Return a string representation of this Profile object.'''
@@ -56,19 +56,22 @@ class Prompt(models.Model):
         '''Return a string representation of this Profile object.'''
         return f'{self.subject} by {self.profile}'
     
-    # def get_absolute_url(self):
-    #     """Return a URL to display one instance of this model."""
-    #     return reverse('show_post', kwargs={'pk': self.pk})
+    def get_absolute_url(self):
+        """Return a URL to display one instance of this model."""
+        return reverse('show_prompt', kwargs={'pk': self.pk})
     
     def get_all_remixes(self):
         """Return a QuerySet of all Remixes directly attached to this Prompt."""
         remixes = Remix.objects.filter(prompt=self, remix__isnull=True)
         return remixes
     
-    # def get_all_likes(self):
-    #     """Return a QuerySet of Likes on this Post."""
-    #     likes = Like.objects.filter(post=self).order_by('-timestamp')
-    #     return likes
+    def get_pk(self):
+        return self.pk
+    
+    def get_all_boosts(self):
+        """Return a QuerySet of Boosts on this Prompt."""
+        boosts = Boost.objects.filter(prompt=self)
+        return boosts
             
 class Follow(models.Model):
     """
@@ -99,6 +102,11 @@ class Remix(models.Model):
         else:
             post = self.prompt
         return f"Re: {post}"
+    
+    def get_all_boosts(self):
+        """Return a QuerySet of Boosts on this Prompt."""
+        boosts = Boost.objects.filter(remix=self)
+        return boosts
     
 class Boost(models.Model):
     """Model that represents a user showing approval of a Prompt or Remix."""

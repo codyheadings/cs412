@@ -1,0 +1,24 @@
+<!-- promptmix/templates/promptmix/login.html -->
+<!-- Cody Headings, codyh@bu.edu 12/04/25 -->
+<!-- html page of log in form for user auth -->
+
+{% extends 'promptmix/base.html' %}
+
+{% block content %}
+<main class="container">
+    <h1>Login</h1>
+    <form method="post" action="{% url 'login' %}" >
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Login">
+
+        {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{request.GET.next}}">
+        {% else %}
+        <input type="hidden" name="next" value="{% url 'show_feed' %}">
+        {% endif %}
+    </form>
+    <hr>
+    Don't have a profile? <a href="{% url 'create_profile' %}">Create one now</a>.
+</main>
+{% endblock %}
