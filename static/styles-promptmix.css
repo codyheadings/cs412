@@ -166,6 +166,30 @@ td {
   box-shadow: 0 2px 6px rgba(16, 102, 69, 0.25);
 }
 
+.minibutton {
+    display: inline-block;
+    padding: 0.4em 1em;
+    border-radius: 6px;
+    background-color: #2ec572;
+    color: white;
+    text-decoration: none;
+    font-size: 0.75rem;
+    transition: background-color 0.25s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 6px rgba(16, 102, 69, 0.25);
+}
+
+.minibutton:hover,
+.minibutton:focus {
+  background-color: #25a55f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(16, 102, 69, 0.25);
+}
+
+.minibutton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(16, 102, 69, 0.25);
+}
+
 .post-thumbnail {
     width: 100%;
     padding: 3px;

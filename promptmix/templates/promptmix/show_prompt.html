@@ -16,7 +16,12 @@
                 <p class="info">{{ prompt.get_all_boosts|length }} Boosts | {{ prompt.get_all_remixes|length }} Remixes</p>
             </tr>
         </table>
-        <a href="{% url 'create_prompt_remix' prompt.pk %}" class="button">Remix this!</a>
+        {% if prompt in prompt_boosts %}
+            <a href="{% url 'delete_prompt_boost' prompt.pk %}" class="minibutton">UnBoost</a>
+        {% else %}
+            <a href="{% url 'create_prompt_boost' prompt.pk %}" class="minibutton">Boost</a>
+        {% endif %}
+        <a href="{% url 'create_prompt_remix' prompt.pk %}" class="minibutton">Remix this!</a>
     </div>
 </main>
 

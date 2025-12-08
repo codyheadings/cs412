@@ -43,6 +43,11 @@
                     <a class="prompt-link" href="{% url 'show_prompt' prompt.pk%}"><p class="info">{{ prompt.get_all_remixes|length }} Remixes</p></a>
                 </div>
             </div>
+            {% if prompt in boosted_prompts %}
+                <a href="{% url 'delete_prompt_boost' prompt.pk %}" class="minibutton">UnBoost</a>
+            {% else %}
+                <a href="{% url 'create_prompt_boost' prompt.pk %}" class="minibutton">Boost</a>
+            {% endif %}
             <div>
             {% for remix in prompt.get_all_remixes|slice:":2" %}
                 {% include "promptmix/remix_tree.html" with remix=remix subject=remix.prompt.subject%}

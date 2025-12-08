@@ -1,0 +1,18 @@
+<!-- promptmix/templates/promptmix/delete_boost.html -->
+<!-- Cody Headings, codyh@bu.edu 10/23/25 -->
+<!-- html page for unliking a post -->
+
+{% extends 'promptmix/base.html' %}
+
+{% block content %}
+<p class="center">You have successfully unBoosted the post.</p>
+{% if unboosted_prompt %}
+<div class="center">
+    <a class="button" href="{% url 'show_prompt' unboosted_prompt.pk %}">Return</a>
+</div>
+{%else%}
+<div class="center">
+    <a class="button" href="{% url 'show_prompt' unboosted_remix.prompt.pk %}">Return</a>
+</div>
+{%endif%}
+{% endblock %}

@@ -1,0 +1,12 @@
+<!-- promptmix/templates/promptmix/create_prompt_boost.html -->
+<!-- Cody Headings, codyh@bu.edu 12/07/25 -->
+<!-- html page for boosting a post -->
+
+{% extends 'promptmix/base.html' %}
+
+{% block content %}
+<p class="center">You have successfully boosted the prompt.</p>
+<div class="center">
+    <a class="button" href="{% url 'show_prompt' boosted_prompt.pk %}">Return</a>
+</div>
+{% endblock %}

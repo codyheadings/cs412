@@ -44,6 +44,27 @@ class ProfileDetailView(DetailView):
                 # TODO: fix when boosts are implemented
                 prompts = prompts.order_by('-timestamp')
 
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+
+        prompt_boosts = Boost.objects.filter(profile=profile, remix__isnull=True)
+        remix_boosts = Boost.objects.filter(profile=profile, prompt__isnull=True)
+
+        boosted_prompts = list(Prompt.objects.none())
+        boosted_remixes = list(Remix.objects.none())
+
+        for boost in prompt_boosts:
+            boosted_prompts += [boost.prompt]
+
+        for boost in remix_boosts:
+            boosted_remixes += [boost.remix]
+
+        context["get_request"] = self.request.GET
+        if boosted_prompts:
+            context["boosted_prompts"] = boosted_prompts
+        if boosted_remixes:
+            context["boosted_remixes"] = boosted_remixes
+
         context["prompts"] = prompts
 
         return context
@@ -59,6 +80,29 @@ class PromptDetailView(DetailView):
         '''Return the dictionary of context variables for use in the template.'''
         # calling the superclass method
         context = super().get_context_data()
+
+        # find the logged in user
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+
+        prompt_boosts = Boost.objects.filter(profile=profile, remix__isnull=True)
+        remix_boosts = Boost.objects.filter(profile=profile, prompt__isnull=True)
+
+        boosted_prompts = list(Prompt.objects.none())
+        boosted_remixes = list(Remix.objects.none())
+
+        for boost in prompt_boosts:
+            boosted_prompts += [boost.prompt]
+
+        for boost in remix_boosts:
+            boosted_remixes += [boost.remix]
+
+        context['profile'] = profile
+        context["get_request"] = self.request.GET
+        if boosted_prompts:
+            context["boosted_prompts"] = boosted_prompts
+        if boosted_remixes:
+            context["boosted_remixes"] = boosted_remixes
  
         context['prompt_page'] = "TRUE"
         return context
@@ -272,8 +316,24 @@ class PromptFeedListView(ListView):
 
         profile = self.get_object()
 
+        prompt_boosts = Boost.objects.filter(profile=profile, remix__isnull=True)
+        remix_boosts = Boost.objects.filter(profile=profile, prompt__isnull=True)
+
+        boosted_prompts = list(Prompt.objects.none())
+        boosted_remixes = list(Remix.objects.none())
+
+        for boost in prompt_boosts:
+            boosted_prompts += [boost.prompt]
+
+        for boost in remix_boosts:
+            boosted_remixes += [boost.remix]
+
         context['profile'] = profile
         context["get_request"] = self.request.GET
+        if boosted_prompts:
+            context["boosted_prompts"] = boosted_prompts
+        if boosted_remixes:
+            context["boosted_remixes"] = boosted_remixes   
         return context
     
 class CreateProfileView(CreateView):
@@ -340,72 +400,136 @@ class CreateProfileView(CreateView):
 #         context['unfollowed_profile'] = unfollowed_profile
 #         return context
 
-# class BoostPromptView(LoginRequiredMixin, TemplateView):
-#     """A view to have the logged in user boost another user's prompt."""
+class BoostPromptView(LoginRequiredMixin, TemplateView):
+    """A view to have the logged in user boost another user's prompt."""
 
-#     template_name="promptmix/boost.html"
+    template_name="promptmix/create_prompt_boost.html"
 
-#     def get_login_url(self) -> str:
-#         '''return the URL required for login'''
-#         return reverse('login')
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
 
-#     def dispatch(self, request, *args, **kwargs):
-#         """Accepts HTTP request and handles response logic."""
+    def dispatch(self, request, *args, **kwargs):
+        """Accepts HTTP request and handles response logic."""
 
-#         user = self.request.user
-#         if user.is_authenticated:
-#             booster_profile = Profile.objects.get(user=user)
+        user = self.request.user
+        if user.is_authenticated:
+            booster_profile = Profile.objects.get(user=user)
 
-#             boosted_prompt = Prompt.objects.get(pk=self.kwargs["pk"])
+            boosted_prompt = Prompt.objects.get(pk=self.kwargs["pk"])
 
-#             # If like doesn't exist, create it
-#             if (len(Boost.objects.filter(profile=booster_profile, prompt=boosted_prompt)) == 0
-#             and booster_profile!=boosted_prompt.profile):
-#                 Boost.objects.create(profile=booster_profile, prompt=boosted_prompt)
+            # If boost doesn't exist, create it
+            if len(Boost.objects.filter(profile=booster_profile, prompt=boosted_prompt)) == 0:
+                Boost.objects.create(profile=booster_profile, prompt=boosted_prompt)
 
-#         return super().dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
     
-#     def get_context_data(self, **kwargs):
-#         '''Return the dictionary of context variables for use in the template.'''
-#         context = super().get_context_data()
+    def get_context_data(self, **kwargs):
+        '''Return the dictionary of context variables for use in the template.'''
+        context = super().get_context_data()
  
-#         # add boosted prompt into the context dictionary:
-#         user = self.request.user
-#         boosted_prompt = Prompt.objects.get(pk=self.kwargs["pk"])
-#         if boosted_prompt.profile == Profile.objects.get(user=user):
-#             context['own_prompt'] = True
-#         context['boosted_prompt'] = boosted_prompt
-#         return context
+        # add boosted prompt into the context dictionary:
+        user = self.request.user
+        boosted_prompt = Prompt.objects.get(pk=self.kwargs["pk"])
+        context['boosted_prompt'] = boosted_prompt
+        return context
     
-# class DeleteBoostView(LoginRequiredMixin, TemplateView):
-#     """A view to have the logged in user unlike another user's prompt."""
+class DeletePromptBoostView(LoginRequiredMixin, TemplateView):
+    """A view to have the logged in user unlike another user's prompt."""
 
-#     template_name="promptmix/delete_like.html"
+    template_name="promptmix/delete_boost.html"
 
-#     def get_login_url(self) -> str:
-#         '''return the URL required for login'''
-#         return reverse('login')
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
 
-#     def dispatch(self, request, *args, **kwargs):
-#         """Accepts HTTP request and handles response logic."""
+    def dispatch(self, request, *args, **kwargs):
+        """Accepts HTTP request and handles response logic."""
 
-#         user = self.request.user
-#         if user.is_authenticated:
-#             booster_profile = Profile.objects.get(user=user)
-#             unboosted_prompt = Prompt.objects.get(pk=self.kwargs["pk"])
+        user = self.request.user
+        if user.is_authenticated:
+            booster_profile = Profile.objects.get(user=user)
+            unboosted_prompt = Prompt.objects.get(pk=self.kwargs["pk"])
 
-#             # If like exists, delete it
-#             if Boost.objects.filter(profile=booster_profile, prompt=unboosted_prompt).exists():
-#                 like = Boost.objects.get(profile=booster_profile, prompt=unboosted_prompt)
-#                 like.delete()
+            # If like exists, delete it
+            if Boost.objects.filter(profile=booster_profile, prompt=unboosted_prompt).exists():
+                like = Boost.objects.get(profile=booster_profile, prompt=unboosted_prompt)
+                like.delete()
 
-#         return super().dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
     
-#     def get_context_data(self, **kwargs):
-#         '''Return the dictionary of context variables for use in the template.'''
-#         context = super().get_context_data()
+    def get_context_data(self, **kwargs):
+        '''Return the dictionary of context variables for use in the template.'''
+        context = super().get_context_data()
  
-#         # add unboosted prompt into the context dictionary:
-#         unboosted_prompt = Prompt.objects.get(pk=self.kwargs["pk"])
-#         context['unboosted_prompt'] = unboosted_prompt
-#         return context
+        # add unboosted prompt into the context dictionary:
+        unboosted_prompt = Prompt.objects.get(pk=self.kwargs["pk"])
+        context['unboosted_prompt'] = unboosted_prompt
+        return context
+    
+class BoostRemixView(LoginRequiredMixin, TemplateView):
+    """A view to have the logged in user boost a user's remix."""
+
+    template_name="promptmix/create_remix_boost.html"
+
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+
+    def dispatch(self, request, *args, **kwargs):
+        """Accepts HTTP request and handles response logic."""
+
+        user = self.request.user
+        if user.is_authenticated:
+            booster_profile = Profile.objects.get(user=user)
+
+            boosted_remix = Remix.objects.get(pk=self.kwargs["pk"])
+
+            # If boost doesn't exist, create it
+            if len(Boost.objects.filter(profile=booster_profile, remix=boosted_remix)) == 0:
+                Boost.objects.create(profile=booster_profile, remix=boosted_remix)
+
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        '''Return the dictionary of context variables for use in the template.'''
+        context = super().get_context_data()
+ 
+        # add boosted remix into the context dictionary:
+        user = self.request.user
+        boosted_remix = Remix.objects.get(pk=self.kwargs["pk"])
+        context['boosted_remix'] = boosted_remix
+        return context
+    
+class DeleteRemixBoostView(LoginRequiredMixin, TemplateView):
+    """A view to have the logged in user unlike a user's remix."""
+
+    template_name="promptmix/delete_boost.html"
+
+    def get_login_url(self) -> str:
+        '''return the URL required for login'''
+        return reverse('login')
+
+    def dispatch(self, request, *args, **kwargs):
+        """Accepts HTTP request and handles response logic."""
+
+        user = self.request.user
+        if user.is_authenticated:
+            booster_profile = Profile.objects.get(user=user)
+            unboosted_remix = Remix.objects.get(pk=self.kwargs["pk"])
+
+            # If like exists, delete it
+            if Boost.objects.filter(profile=booster_profile, remix=unboosted_remix).exists():
+                like = Boost.objects.get(profile=booster_profile, remix=unboosted_remix)
+                like.delete()
+
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        '''Return the dictionary of context variables for use in the template.'''
+        context = super().get_context_data()
+ 
+        # add unboosted remix into the context dictionary:
+        unboosted_remix = Remix.objects.get(pk=self.kwargs["pk"])
+        context['unboosted_remix'] = unboosted_remix
+        return context

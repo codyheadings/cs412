@@ -9,6 +9,10 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('profile/<int:pk>', ProfileDetailView.as_view(), name='show_profile'),
     path('prompt/<int:pk>', PromptDetailView.as_view(), name='show_prompt'),
+    path('prompt/<int:pk>/boost', BoostPromptView.as_view(), name='create_prompt_boost'),
+    path('prompt/<int:pk>/delete_boost', DeletePromptBoostView.as_view(), name='delete_prompt_boost'),
+    path('remix/<int:pk>/boost', BoostRemixView.as_view(), name='create_remix_boost'),
+    path('remix/<int:pk>/delete_boost', DeleteRemixBoostView.as_view(), name='delete_remix_boost'),
     path('profile/create_prompt', CreatePromptView.as_view(), name='create_prompt'),
     path('profile/update', UpdateProfileView.as_view(), name='update_profile'),
     path("prompt/<int:prompt_id>/remix", CreateRemixView.as_view(), name="create_prompt_remix"),

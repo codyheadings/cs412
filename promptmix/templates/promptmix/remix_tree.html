@@ -17,8 +17,14 @@
     <hr>
     <p class="info">{{ remix.get_all_boosts|length }} Boosts | {{ remix.children.all|length }} {% if remix.children.all|length == 1%}Remix{%else%}Remixes{%endif%}</p>
 
+    {% if remix in boosted_remixes %}
+        <a href="{% url 'delete_remix_boost' remix.pk %}" class="minibutton">UnBoost</a>
+    {% else %}
+        <a href="{% url 'create_remix_boost' remix.pk %}" class="minibutton">Boost</a>
+    {% endif %}
+    
     {% if prompt_page %}
-        <a href="{% url 'create_remix_remix' remix.pk %}" class="button">Remix this!</a>
+        <a href="{% url 'create_remix_remix' remix.pk %}" class="minibutton">Remix this!</a>
     {% endif %}
 
     {% if remix.children.all %}
