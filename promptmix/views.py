@@ -5,7 +5,7 @@
 from promptmix.forms import *
 from .models import *
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -34,15 +34,20 @@ class ProfileDetailView(DetailView):
             if keywords:
                 prompts = prompts.filter(Q(subject__icontains=keywords) | Q(text__icontains=keywords))
 
+        prompts = prompts.annotate(boost_count=Count('boosted_prompt',
+                                                      distinct=True))
+
         if 'sort' in self.request.GET:
             sort = self.request.GET['sort']
             if sort=="newest":
                 prompts = prompts.order_by('-timestamp')
             elif sort=="oldest":
                 prompts = prompts.order_by('timestamp')
+            elif sort=="unpopular":
+                prompts = prompts.order_by('boost_count', '-timestamp')
             else:
-                # TODO: fix when boosts are implemented
-                prompts = prompts.order_by('-timestamp')
+                # sort by most popular
+                prompts = prompts.order_by('-boost_count', '-timestamp')
 
         user = self.request.user
         profile = Profile.objects.get(user=user)
@@ -290,13 +295,16 @@ class PromptFeedListView(ListView):
 
     def get_queryset(self):
         """Return the feed prompts from the database."""
-        # TODO: Add alternate sorting options for main feed
         prompts = super().get_queryset()
 
         if 'keywords' in self.request.GET:
             keywords = self.request.GET['keywords']
             if keywords:
-                prompts = prompts.filter(Q(subject__icontains=keywords) | Q(text__icontains=keywords))
+                prompts = prompts.filter(Q(subject__icontains=keywords) 
+                                         | Q(text__icontains=keywords))
+
+        prompts = prompts.annotate(boost_count=Count('boosted_prompt',
+                                                      distinct=True))
 
         if 'sort' in self.request.GET:
             sort = self.request.GET['sort']
@@ -304,9 +312,11 @@ class PromptFeedListView(ListView):
                 prompts = prompts.order_by('-timestamp')
             elif sort=="oldest":
                 prompts = prompts.order_by('timestamp')
+            elif sort=="unpopular":
+                prompts = prompts.order_by('boost_count', '-timestamp')
             else:
-                # TODO: fix when boosts are implemented
-                prompts = prompts.order_by('-timestamp')
+                # sort by most popular
+                prompts = prompts.order_by('-boost_count', '-timestamp')
 
         return prompts
 

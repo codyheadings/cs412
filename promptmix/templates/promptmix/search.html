@@ -20,11 +20,22 @@
         </select></td>
     </tr>
     <tr>
-        <td><input type="submit"></td>
+        <td><p></p></td>
+    </tr>
+    <tr>
+        <td><input type="submit" class="minibutton"></td>
     </tr>
 </form>
 </table>
 
-<form action="{% url 'show_feed'%}">
-    <input type="submit" value="Cancel">
-</form>
+<table>
+    <form action="{% url 'show_feed'%}">
+        <tr>
+            <td>
+                <input type="submit" value="Reset" class="minibutton">
+            </td>
+        </tr>
+    </form>
+</table>
+
+<br>
