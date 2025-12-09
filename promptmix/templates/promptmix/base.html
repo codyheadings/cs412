@@ -16,6 +16,7 @@
                     <!-- Add some nav options here -->
                     <li><a href="{% url 'show_feed' %}" class="button">Feed</a></li>
                     {% if request.user.is_authenticated %}
+                    <li><a href="{% url 'show_followed' %}" class="button">Followed Prompts</a></li>
                     {% if profile %}
                     {% if profile.user == request.user %}
                     <li><a class="button" href="{% url 'create_prompt' %}">
@@ -51,12 +52,12 @@
             </div>
         </header>
         
+        <div id="top"></div>
         {% block content %}
         {% endblock %}
         
-        <!-- <footer>
-            <div  class="footer-wrapper">
-            </div>
-        </footer> -->
+        <footer>
+            <a href="#top" class="button" style="float: right;">^</a>
+        </footer>
     </body>
 </html>

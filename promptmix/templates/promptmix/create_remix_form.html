@@ -5,22 +5,16 @@
 {% extends 'promptmix/base.html' %}
 {% block content %}
 
-<div class="grid-container">
-    <div>
-        <h1>Create a new Prompt</h1>
+<div class="container">
+    <h1>New Remix</h1>
 
+    <div class="form">
         {% if parent %}
             <p>Remixing: <strong>{{ parent.profile }}</strong>:</p>
             <blockquote>{{ parent.text }}</blockquote>
-            <form action="{% url 'show_prompt' prompt.pk %}" method="GET">
-                <input class="button" type='submit' value= 'Cancel'>
-            </form>
         {% else %}
             <p>Remixing: <strong>{{ prompt.subject }}</strong></p>
             <blockquote>{{ prompt.text }}</blockquote>
-            <form action="{% url 'show_prompt' prompt.pk %}" method="GET">
-                <input class="button" type='submit' value= 'Cancel'>
-            </form>
         {% endif %}
 
         <!-- display the HTML form -->
@@ -34,10 +28,14 @@
                 {{ form.text }}
                 {{ form.text.errors }}
             </div>
-
-            <button type="submit">Remix</button>
+            <br>
+            <button type="submit" class="button">Remix</button>
         </form>
     </div>
+
+    <form action="{% url 'show_prompt' prompt.pk %}" method="GET">
+        <input class="button" type='submit' value= 'Cancel'>
+    </form>
 </div>
 
 {% endblock %}

@@ -1,0 +1,36 @@
+<!-- promptmix/templates/promptmix/update_prompt_form.html -->
+<!-- Cody Headings, codyh@bu.edu 12/08/2025 -->
+<!-- html page form for updating a prompt -->
+{% extends 'promptmix/base.html' %}
+ 
+{% block content %}
+<main class="container">
+    <h1>Edit Prompt</h1>
+
+    <form class="form" method = 'POST' enctype="multipart/form-data">
+    {% csrf_token %}
+
+        <table>
+        <tr>
+            <th>Subject:</th>
+            <td>{{form.subject}}</td>
+        </tr>
+        <tr>
+            <th>Text:</th>
+            <td>{{form.text}}</td>
+        </tr>
+        <tr>
+            <td>
+                <input class="button" type='submit' name ='update_prompt' 
+                value='Edit Prompt'>
+            </td>
+        </tr>
+        </table>
+    </form>
+
+    <form action="{% url 'show_prompt' prompt.pk %}" method="GET">
+        <input class="button" type='submit' value='Cancel'>
+    </form>
+</main>
+
+{% endblock %}

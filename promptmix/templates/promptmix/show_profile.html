@@ -13,7 +13,7 @@
         {% endif %}
 
         <div>
-            <h1>{{profile.display_name}}</h1>
+            <h1 class="name">{{profile.display_name}}</h1>
             <hr>
             <p>Joined {{profile.join_date}}</p>
         </div>
@@ -34,6 +34,14 @@
             <div>
                 <h3>Remixes:</h3>
                 <p>{{profile.get_remix_count}}</p>
+            </div>
+            <div>
+                <h3>Words Written:</h3>
+                <p>{{profile.get_total_words}}</p>
+            </div>
+            <div>
+                <h3>Words per Remix:</h3>
+                <p>{{profile.get_avg_words}}</p>
             </div>
     </profile>
 </main>
@@ -65,17 +73,45 @@
                             <span class="timestamp">{{prompt.timestamp}}</span>
                         </div>
                     </div>
+                    <div style="float: right;">
+                        {% if prompt in followed_prompts %}
+                        <a href="{% url 'delete_follow' prompt.pk %}" class="minibutton">Unfollow</a>
+                        {% else %}
+                            <a href="{% url 'create_follow' prompt.pk %}" class="minibutton">Follow</a>
+                        {% endif %}
+                    </div>
 
                     <div class="feed-caption">
                         <a class="prompt-link" href="{% url 'show_prompt' prompt.pk%}"><strong class="subject">{{prompt.subject}}</strong></a>
-                        <p>{{prompt.text}}</p>
+                        <p>{{prompt.text|linebreaksbr}}</p>
                         <hr>
                         <!-- add count of remixes and boosts -->
                         <div style="display: flex; justify-content: space-between;">
-                            <p class="info">{{ prompt.get_all_boosts|length }} Boosts</p>
-                            <a class="prompt-link" href="{% url 'show_prompt' prompt.pk%}"><p class="info">{{ prompt.get_all_remixes|length }} Remixes</p></a>
+                            <p class="info">
+                                {{ prompt.get_all_boosts|length }} 
+                                {% if prompt.get_all_boosts|length == 1%}
+                                Boost
+                                {%else%}
+                                Boosts
+                                {%endif%}
+                            </p>
+                            <a class="prompt-link" href="{% url 'show_prompt' prompt.pk%}">
+                                <p class="info">
+                                    {{ prompt.get_all_remixes|length }} 
+                                    {% if prompt.get_all_remixes|length == 1%}
+                                    Remix
+                                    {%else%}
+                                    Remixes
+                                    {%endif%}
+                                </p>
+                            </a>
                         </div>
                     </div>
+                    {% if prompt in boosted_prompts %}
+                        <a href="{% url 'delete_prompt_boost' prompt.pk %}" class="minibutton">UnBoost</a>
+                    {% else %}
+                        <a href="{% url 'create_prompt_boost' prompt.pk %}" class="minibutton">Boost</a>
+                    {% endif %}
                     <div>
                     {% for remix in prompt.get_all_remixes|slice:":2" %}
                         {% include "promptmix/remix_tree.html" with remix=remix subject=remix.prompt.subject%}

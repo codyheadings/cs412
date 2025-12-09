@@ -10,10 +10,10 @@
         <a href="{% url 'show_profile' remix.profile.pk %}">
             {{ remix.profile }}
         </a> 
-        | {{ remix.timestamp }}
+        | {{ remix.timestamp }} | {{ remix.word_count }} words
     </p>
 
-    <p>{{ remix.text }}</p>
+    <p>{{ remix.text|linebreaksbr }}</p>
     <hr>
     <p class="info">{{ remix.get_all_boosts|length }} Boosts | {{ remix.children.all|length }} {% if remix.children.all|length == 1%}Remix{%else%}Remixes{%endif%}</p>
 

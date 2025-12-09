@@ -43,9 +43,6 @@ footer {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background: #fff;
-  border-top: 1px solid #e2e8f0;
-  padding: 0.35rem;
 }
 
 .container,
@@ -141,11 +138,39 @@ td {
     text-align: center;
 }
 
+.pagination {
+  padding: 10px;
+  margin: 0;
+  text-align: center;
+}
+
+.pagination li {
+  padding: 5px 0;
+}
+
+.box {
+  max-width: 100px;
+  margin: 20px auto;
+  background: #f1f1f1;
+  padding: 10px;
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.form {
+  max-width: 100%;
+  margin: 20px auto;
+  background: #f1f1f1;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
 .button {
     display: inline-block;
     padding: 0.6em 1.2em;
     border-radius: 8px;
-    background-color: #2ec572;
+    background-color: #1e9c87;
     color: white;
     text-decoration: none;
     font-size: 0.95rem;
@@ -155,7 +180,7 @@ td {
 
 .button:hover,
 .button:focus {
-  background-color: #25a55f;
+  background-color: #0b665a;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(16, 102, 69, 0.25);
 }
@@ -169,7 +194,7 @@ td {
     display: inline-block;
     padding: 0.4em 1em;
     border-radius: 6px;
-    background-color: #2ec572;
+    background-color: #1e9c87;
     color: white;
     text-decoration: none;
     font-size: 0.75rem;
@@ -179,7 +204,7 @@ td {
 
 .minibutton:hover,
 .minibutton:focus {
-  background-color: #25a55f;
+  background-color: #0b665a;
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(16, 102, 69, 0.25);
 }
@@ -209,13 +234,20 @@ td {
 }
 
 a {
-  color: #25a55f
+  color: #0b665a
+}
+
+.name {
+  color: #484e4e;
 }
 
 .show-more {
-  color: #25a55f;
+  color: #0b665a;
   cursor: pointer;
-  padding-bottom: 10px;
+  max-width: 15%;
+  background: #e9f1f1;
+  padding: 15px;
+  border-radius: 16px;
 }
 
 .feed-container {
@@ -259,10 +291,6 @@ a {
 
 .subject {
   font-size: large;
-}
-
-.show-more {
-  max-width: 20%;
 }
 
 .username {

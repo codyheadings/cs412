@@ -1,0 +1,20 @@
+<!-- promptmix/templates/promptmix/pagination_nav.html -->
+<!-- Cody Headings, codyh@bu.edu 12/08/25 -->
+<!-- Navigation links for paginated list views -->
+
+<ul class="pagination">
+    {% if page_obj.has_previous %}
+        <li>
+            <span><a href="?page={{ page_obj.previous_page_number }}" class="minibutton">Previous</a></span>
+        
+        </li>
+    {% endif %}
+        <li>
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        </li>
+    {% if page_obj.has_next %}
+        <li>
+            <span><a href="?page={{ page_obj.next_page_number }}" class="minibutton">Next</a></span>
+        </li>
+    {% endif %}
+</ul>

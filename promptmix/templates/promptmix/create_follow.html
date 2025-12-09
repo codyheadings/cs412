@@ -1,0 +1,13 @@
+<!-- promptmix/templates/promptmix/create_follow.html -->
+<!-- Cody Headings, codyh@bu.edu 12/08/25 -->
+<!-- html page for following a prompt -->
+
+{% extends 'promptmix/base.html' %}
+
+{% block content %}
+<p class="center">You have successfully followed "{{followed_prompt.subject}}."</p>
+<div class="center">
+    <a class="button" href="{% url 'show_prompt' followed_prompt.pk %}">View it</a>
+    <a class="button" href="{% url 'show_followed' %}">View All Followed Prompts</a>
+</div>
+{% endblock %}

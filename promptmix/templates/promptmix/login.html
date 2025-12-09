@@ -7,7 +7,7 @@
 {% block content %}
 <main class="container">
     <h1>Login</h1>
-    <form method="post" action="{% url 'login' %}" >
+    <form method="post" action="{% url 'login' %}" class="form">
         {% csrf_token %}
         {{form}}
         <input type="submit" value="Login">
@@ -19,6 +19,8 @@
         {% endif %}
     </form>
     <hr>
-    Don't have a profile? <a href="{% url 'create_profile' %}">Create one now</a>.
+    <p>
+        Don't have a profile? <a href="{% url 'create_profile' %}">Create one now</a>.
+    </p>
 </main>
 {% endblock %}

@@ -10,6 +10,8 @@
 
     {% include "promptmix/search.html" %}
 
+    {% include "promptmix/pagination_nav.html" %}
+
     {% if prompts %}
     {% for prompt in prompts %}
         <div class="feed-post">
@@ -31,16 +33,39 @@
                     </a>
                     <span class="timestamp">{{prompt.timestamp}}</span>
                 </div>
+                </div>
+            <div style="float: right;">
+                {% if prompt in followed_prompts %}
+                <a href="{% url 'delete_follow' prompt.pk %}" class="minibutton">Unfollow</a>
+                {% else %}
+                    <a href="{% url 'create_follow' prompt.pk %}" class="minibutton">Follow</a>
+                {% endif %}
             </div>
 
             <div class="feed-caption">
                 <a class="prompt-link" href="{% url 'show_prompt' prompt.pk%}"><strong class="subject">{{prompt.subject}}</strong></a>
-                <p>{{prompt.text}}</p>
+                <p>{{prompt.text|linebreaksbr}}</p>
                 <hr>
                 <!-- add count of remixes and boosts -->
                 <div style="display: flex; justify-content: space-between;">
-                    <p class="info">{{ prompt.get_all_boosts|length }} Boosts</p>
-                    <a class="prompt-link" href="{% url 'show_prompt' prompt.pk%}"><p class="info">{{ prompt.get_all_remixes|length }} Remixes</p></a>
+                    <p class="info">
+                        {{ prompt.get_all_boosts|length }} 
+                        {% if prompt.get_all_boosts|length == 1%}
+                        Boost
+                        {%else%}
+                        Boosts
+                        {%endif%}
+                    </p>
+                    <a class="prompt-link" href="{% url 'show_prompt' prompt.pk%}">
+                        <p class="info">
+                            {{ prompt.get_all_remixes|length }} 
+                            {% if prompt.get_all_remixes|length == 1%}
+                            Remix
+                            {%else%}
+                            Remixes
+                            {%endif%}
+                        </p>
+                    </a>
                 </div>
             </div>
             {% if prompt in boosted_prompts %}
@@ -71,4 +96,9 @@
         <p>No posts found. Try searching for something less specific.</p>
     {% endif %}
 </main>
+
+<div class="box">
+    {% include "promptmix/pagination_nav.html" %}
+</div>
+
 {% endblock %}

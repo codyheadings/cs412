@@ -5,11 +5,11 @@
 {% extends 'promptmix/base.html' %}
 {% block content %}
 
-<div class="grid-container">
+<div class="container">
     <div>
         <h1>Create a new Prompt</h1>
         <!-- display the HTML form -->
-        <form action="{% url 'create_prompt' %}" method="POST" 
+        <form class="form" action="{% url 'create_prompt' %}" method="POST" 
         enctype="multipart/form-data">
             {% csrf_token %}
             <table>

@@ -1,0 +1,12 @@
+<!-- promptmix/templates/promptmix/delete_follow.html -->
+<!-- Cody Headings, codyh@bu.edu 12/08/25 -->
+<!-- html page for unfollowing a prompt -->
+
+{% extends 'promptmix/base.html' %}
+
+{% block content %}
+<p class="center">You have successfully unfollowed "{{unfollowed_prompt.subject}}."</p>
+<div class="center">
+    <a class="button" href="{% url 'show_feed' %}">Return</a>
+</div>
+{% endblock %}

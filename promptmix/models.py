@@ -42,6 +42,20 @@ class Profile(models.Model):
         numremixes = len(Remix.objects.filter(profile=self))
         return numremixes
     
+    def get_total_words(self):
+        """Return total number of words in all remixes."""
+        remixes = Remix.objects.filter(profile=self)
+        total = 0
+        for remix in remixes:
+            total += remix.word_count()
+        return total
+    
+    def get_avg_words(self):
+        """Return avg number of words per remix."""
+        total=self.get_total_words()
+        numremixes = self.get_remix_count()
+        return total/numremixes
+    
 class Prompt(models.Model):
     """Model that represents a single posted prompt for a Profile."""
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE) 
@@ -107,6 +121,10 @@ class Remix(models.Model):
         """Return a QuerySet of Boosts on this Prompt."""
         boosts = Boost.objects.filter(remix=self)
         return boosts
+    
+    def word_count(self):
+        words = self.text.split()
+        return len(words)
     
 class Boost(models.Model):
     """Model that represents a user showing approval of a Prompt or Remix."""

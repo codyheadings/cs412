@@ -5,15 +5,15 @@
  
 {% block content %}
 <main class="container">
-    <h2>Create Profile</h2>
+    <h1>Create Profile</h1>
 
-    <form method = 'POST' enctype="multipart/form-data">
+    <form class="form" method = 'POST' enctype="multipart/form-data">
     {% csrf_token %}
 
         <table>
         {{user_form}}
         <tr>
-            <th>Display Name:</th>
+            <th>Promptmix Display Name:</th>
             <td>{{form.display_name}}</td>
         </tr>
         <tr>

@@ -8,12 +8,38 @@
     <div class="prompt">
         <table>
             <tr>
+                <div style="float: right;">
+                    {% if prompt in followed_prompts %}
+                    <a href="{% url 'delete_follow' prompt.pk %}" class="minibutton">Unfollow</a>
+                    {% else %}
+                        <a href="{% url 'create_follow' prompt.pk %}" class="minibutton">Follow</a>
+                    {% endif %}
+                </div>
                 <h3>{{prompt.subject}}</h3>
                 <hr>
-                <p>{{prompt.text}}</p>
+                <p>{{prompt.text|linebreaksbr}}</p>
                 <p class="info">Posted by <a href="{% url 'show_profile' prompt.profile.pk %}">{{prompt.profile}}</a> on {{prompt.timestamp}}</p>
                 <!-- add count of remixes and boosts -->
-                <p class="info">{{ prompt.get_all_boosts|length }} Boosts | {{ prompt.get_all_remixes|length }} Remixes</p>
+                <div style="display: flex; justify-content: space-between;">
+                    <p class="info">
+                        {{ prompt.get_all_boosts|length }} 
+                        {% if prompt.get_all_boosts|length == 1%}
+                        Boost
+                        {%else%}
+                        Boosts
+                        {%endif%}
+                    </p>
+                    <a class="prompt-link" href="{% url 'show_prompt' prompt.pk%}">
+                        <p class="info">
+                            {{ prompt.get_all_remixes|length }} 
+                            {% if prompt.get_all_remixes|length == 1%}
+                            Remix
+                            {%else%}
+                            Remixes
+                            {%endif%}
+                        </p>
+                    </a>
+                </div>
             </tr>
         </table>
         {% if prompt in prompt_boosts %}
@@ -33,7 +59,7 @@
 
     {% if prompt.get_all_remixes|length > 2 %}
         <div class="show-more" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">
-            Show {{ prompt.get_all_remixes|length|add:"-2" }} more {% if remix.children.all|length|add:"-2" == 1%}Remix{%else%}Remixes{%endif%}...
+            Show {{ prompt.get_all_remixes|length|add:"-2" }} more {% if prompt.get_all_remixes|length|add:"-2" == 1%}Remix{%else%}Remixes{%endif%}...
         </div>
 
         <div style="display:none;">

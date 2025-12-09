@@ -1,0 +1,93 @@
+<!-- promptmix/templates/promptmix/show_followed.html -->
+<!-- Cody Headings, codyh@bu.edu 12/08/25 -->
+<!-- html page for list view of followed prompts for a profile -->
+
+{% extends 'promptmix/base.html' %}
+
+{% block content %}
+<main class="feed-container">
+    <h2 class="center">Followed</h2>
+
+    {% include "promptmix/followed_search.html" %}
+
+    {% if prompts %}
+    {% for prompt in prompts %}
+        <div class="feed-post">
+            <div class="feed-header">
+                <a href="{% url 'show_profile' prompt.profile.pk %}">
+                    {% if prompt.profile.profile_image_url %}
+                        <img src="{{ prompt.profile.profile_image_url }}" 
+                        alt="{{ prompt.profile.username }}" 
+                        class="feed-profile-pic">
+                    {% else %}
+                        <img src="https://cs-webapps.bu.edu/codyh/media/NoImage.png" 
+                        alt="No Profile Image" 
+                        class="feed-profile-pic">
+                    {% endif %}
+                </a>
+                <div class="feed-user-info">
+                    <a href="{% url 'show_profile' prompt.profile.pk %}" class="username">
+                        {{prompt.profile}}
+                    </a>
+                    <span class="timestamp">{{prompt.timestamp}}</span>
+                </div>
+            </div>
+            <div style="float: right;">
+                <a href="{% url 'delete_follow' prompt.pk %}" class="minibutton">Unfollow</a>
+            </div>
+
+            <div class="feed-caption">
+                <a class="prompt-link" href="{% url 'show_prompt' prompt.pk%}"><strong class="subject">{{prompt.subject}}</strong></a>
+                <p>{{prompt.text|linebreaksbr}}</p>
+                <hr>
+                <!-- add count of remixes and boosts -->
+                <div style="display: flex; justify-content: space-between;">
+                    <p class="info">
+                        {{ prompt.get_all_boosts|length }} 
+                        {% if prompt.get_all_boosts|length == 1%}
+                        Boost
+                        {%else%}
+                        Boosts
+                        {%endif%}
+                    </p>
+                    <a class="prompt-link" href="{% url 'show_prompt' prompt.pk%}">
+                        <p class="info">
+                            {{ prompt.get_all_remixes|length }} 
+                            {% if prompt.get_all_remixes|length == 1%}
+                            Remix
+                            {%else%}
+                            Remixes
+                            {%endif%}
+                        </p>
+                    </a>
+                </div>
+            </div>
+            {% if prompt in boosted_prompts %}
+                <a href="{% url 'delete_prompt_boost' prompt.pk %}" class="minibutton">UnBoost</a>
+            {% else %}
+                <a href="{% url 'create_prompt_boost' prompt.pk %}" class="minibutton">Boost</a>
+            {% endif %}
+            <div>
+            {% for remix in prompt.get_all_remixes|slice:":2" %}
+                {% include "promptmix/remix_tree.html" with remix=remix subject=remix.prompt.subject%}
+            {% endfor %}
+
+            {% if prompt.get_all_remixes|length > 2 %}
+                <div class="show-more" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">
+                    Show {{ prompt.get_all_remixes|length|add:"-2" }} more {% if prompt.get_all_remixes|length|add:"-2" == 1%}Remix{%else%}Remixes{%endif%}...
+                </div>
+
+                <div style="display:none;">
+                    {% for remix in prompt.get_all_remixes|slice:"2:" %}
+                        {% include "promptmix/remix_tree.html" with remix=remix subject=remix.prompt.subject%}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        </div>
+    {% endfor %}
+    {% else %}
+        <p>No posts found. Try searching for something less specific.</p>
+    {% endif %}
+</main>
+{% endblock %}

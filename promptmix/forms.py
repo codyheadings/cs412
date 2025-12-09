@@ -36,6 +36,14 @@ class UpdatePromptForm(forms.ModelForm):
         model=Prompt
         fields = ["subject", "text"]
 
+class UpdateRemixForm(forms.ModelForm):
+    """A form to update a remix in the database."""
+
+    class Meta:
+        """Associate this form with a model from the database"""
+        model=Remix
+        fields = ["text"]
+
 class CreateProfileForm(forms.ModelForm):
     """A form to create a new profile in the database."""
 

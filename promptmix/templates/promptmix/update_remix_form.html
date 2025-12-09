@@ -1,0 +1,32 @@
+<!-- promptmix/templates/promptmix/update_remix_form.html -->
+<!-- Cody Headings, codyh@bu.edu 12/08/2025 -->
+<!-- html page form for updating a remix -->
+{% extends 'promptmix/base.html' %}
+ 
+{% block content %}
+<main class="container">
+    <h1>Edit Remix</h1>
+
+    <form class="form" method = 'POST' enctype="multipart/form-data">
+    {% csrf_token %}
+
+        <table>
+        <tr>
+            <th>Text:</th>
+            <td>{{form.text}}</td>
+        </tr>
+        <tr>
+            <td>
+                <input class="button" type='submit' name ='update_remix' 
+                value='Edit Remix'>
+            </td>
+        </tr>
+        </table>
+    </form>
+
+    <form action="{% url 'show_prompt' remix.prompt.pk %}" method="GET">
+        <input class="button" type='submit' value='Cancel'>
+    </form>
+</main>
+
+{% endblock %}
