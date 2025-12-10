@@ -54,7 +54,10 @@ class Profile(models.Model):
         """Return avg number of words per remix."""
         total=self.get_total_words()
         numremixes = self.get_remix_count()
-        return total/numremixes
+        if numremixes>0:
+            return total/numremixes
+        else:
+            return 0.0
     
 class Prompt(models.Model):
     """Model that represents a single posted prompt for a Profile."""
@@ -108,6 +111,10 @@ class Remix(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     text = models.TextField(blank=False)
+
+    def get_absolute_url(self):
+        """Return a URL to redirect user to prompt page where the remix is."""
+        return reverse('show_prompt', kwargs={'pk': self.prompt.pk})
 
     def __str__(self):
         """Return string representation of this comment."""

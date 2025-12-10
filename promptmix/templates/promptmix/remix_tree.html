@@ -3,9 +3,16 @@
 <!-- Recursive page for displaying many remixes in a chain -->
 
 <div class="feed-post">
-    <strong>
-        Re: {{subject}}
-    </strong>
+    <div class="remix">
+    <div class="remix-header">
+        <strong>
+            Re: {{ subject }}
+        </strong>
+
+        <button class="collapse-button" onclick="toggleRemix(this)">
+            Collapse
+        </button>
+    </div>
     <p class="info">
         <a href="{% url 'show_profile' remix.profile.pk %}">
             {{ remix.profile }}
@@ -15,7 +22,7 @@
 
     <p>{{ remix.text|linebreaksbr }}</p>
     <hr>
-    <p class="info">{{ remix.get_all_boosts|length }} Boosts | {{ remix.children.all|length }} {% if remix.children.all|length == 1%}Remix{%else%}Remixes{%endif%}</p>
+    <p class="info">{{ remix.get_all_boosts|length }} {% if remix.get_all_boosts|length == 1%}Boost{% else %}Boosts{%endif%} | {{ remix.children.all|length }} {% if remix.children.all|length == 1%}Remix{%else%}Remixes{%endif%}</p>
 
     {% if remix in boosted_remixes %}
         <a href="{% url 'delete_remix_boost' remix.pk %}" class="minibutton">UnBoost</a>
@@ -25,6 +32,9 @@
     
     {% if prompt_page %}
         <a href="{% url 'create_remix_remix' remix.pk %}" class="minibutton">Remix this!</a>
+        {% if remix.profile == profile %}
+        <a class="minibutton" href="{% url 'update_remix' remix.pk %}">Edit</a>
+        {% endif %}
     {% endif %}
 
     {% if remix.children.all %}
@@ -47,3 +57,22 @@
         </div>
     {% endif %}
 </div>
+</div>
+
+<!-- JS function to collapse a thread -->
+<script>
+function toggleRemix(button) {
+    const remixDiv = button.closest(".remix");
+    const children = remixDiv.querySelector(":scope > .children");
+
+    if (!children) return;
+
+    if (children.style.display === "none") {
+        children.style.display = "";
+        button.textContent = "Collapse";
+    } else {
+        children.style.display = "none";
+        button.textContent = "Expand";
+    }
+}
+</script>

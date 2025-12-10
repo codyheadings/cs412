@@ -48,6 +48,9 @@
             <a href="{% url 'create_prompt_boost' prompt.pk %}" class="minibutton">Boost</a>
         {% endif %}
         <a href="{% url 'create_prompt_remix' prompt.pk %}" class="minibutton">Remix this!</a>
+        {% if prompt.profile == profile %}
+        <a class="minibutton" href="{% url 'update_prompt' prompt.pk %}">Edit</a>
+        {% endif %}
     </div>
 </main>
 

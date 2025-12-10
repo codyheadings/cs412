@@ -39,3 +39,28 @@
 </table>
 
 <br>
+
+<div class="thread-controls">
+    <button onclick="collapseAll()" class="collapse-all-button">Collapse All</button>
+    <button onclick="expandAll()" class="collapse-all-button">Expand All</button>
+</div>
+
+<script>
+function collapseAll() {
+    document.querySelectorAll(".prompt-remixes").forEach(remixBlock => {
+        remixBlock.style.display = "none";
+    });
+    document.querySelectorAll(".collapse-button").forEach(btn => {
+        btn.textContent = "Expand";
+    });
+}
+
+function expandAll() {
+    document.querySelectorAll(".prompt-remixes").forEach(remixBlock => {
+        remixBlock.style.display = "";
+    });
+    document.querySelectorAll(".collapse-button").forEach(btn => {
+        btn.textContent = "Collapse";
+    });
+}
+</script>

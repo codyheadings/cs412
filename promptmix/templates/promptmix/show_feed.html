@@ -33,7 +33,10 @@
                     </a>
                     <span class="timestamp">{{prompt.timestamp}}</span>
                 </div>
-                </div>
+                <button class="collapse-button" onclick="togglePrompt(this)">
+                    Collapse
+                </button>
+            </div>
             <div style="float: right;">
                 {% if prompt in followed_prompts %}
                 <a href="{% url 'delete_follow' prompt.pk %}" class="minibutton">Unfollow</a>
@@ -73,7 +76,7 @@
             {% else %}
                 <a href="{% url 'create_prompt_boost' prompt.pk %}" class="minibutton">Boost</a>
             {% endif %}
-            <div>
+        <div class="prompt-remixes">
             {% for remix in prompt.get_all_remixes|slice:":2" %}
                 {% include "promptmix/remix_tree.html" with remix=remix subject=remix.prompt.subject%}
             {% endfor %}
@@ -90,7 +93,8 @@
                 </div>
             {% endif %}
         </div>
-        </div>
+    </div>
+    </div>
     {% endfor %}
     {% else %}
         <p>No posts found. Try searching for something less specific.</p>
@@ -100,5 +104,23 @@
 <div class="box">
     {% include "promptmix/pagination_nav.html" %}
 </div>
+
+<!-- JS function to collapse a thread -->
+<script>
+function togglePrompt(button) {
+    const post = button.closest(".feed-post");
+    const remixBlock = post.querySelector(".prompt-remixes");
+
+    if (!remixBlock) return;
+
+    if (remixBlock.style.display === "none") {
+        remixBlock.style.display = "";
+        button.textContent = "Collapse";
+    } else {
+        remixBlock.style.display = "none";
+        button.textContent = "Expand";
+    }
+}
+</script>
 
 {% endblock %}

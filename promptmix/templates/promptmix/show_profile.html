@@ -19,14 +19,8 @@
         </div>
 
         </div>
-        {% if profile.user == request.user %}
-        <div>
-            <a class="button" href="{% url 'update_profile' %}">
-                Update Profile</a>
-        </div>
-        {% endif %}
 
-        <div class="grid-container-2" style="margin-left: auto;">
+        <div class="grid-container-2">
             <div>
                 <h3>Prompts:</h3>
                 <p>{{profile.get_prompt_count}}</p>
@@ -43,6 +37,13 @@
                 <h3>Words per Remix:</h3>
                 <p>{{profile.get_avg_words}}</p>
             </div>
+        </div>
+        {% if profile.user == request.user %}
+        <div style="margin-left: auto;">
+            <a class="button" href="{% url 'update_profile' %}">
+                Update Profile</a>
+        </div>
+        {% endif %}
     </profile>
 </main>
 <main class="feed-container">
@@ -112,7 +113,8 @@
                     {% else %}
                         <a href="{% url 'create_prompt_boost' prompt.pk %}" class="minibutton">Boost</a>
                     {% endif %}
-                    <div>
+                <div>
+                    <div class="prompt-remixes">
                     {% for remix in prompt.get_all_remixes|slice:":2" %}
                         {% include "promptmix/remix_tree.html" with remix=remix subject=remix.prompt.subject%}
                     {% endfor %}
@@ -128,8 +130,9 @@
                             {% endfor %}
                         </div>
                     {% endif %}
+                    </div>
                 </div>
-                </div>
+            </div>
             {% endfor %}
         {% else %}
             <p>No posts found. Try searching for something less specific.</p>

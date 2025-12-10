@@ -28,26 +28,24 @@
                     </a></li>
                     {% endif %}
                     {% endif %}
-                    {% if request.user.is_authenticated %}
-                    <form method="post" action="{% url 'logout' %}" >
-                        {% csrf_token %}
-                        <li><input type="submit" value="Logout" class="button"></li>
-                    </form>
-                    {% else %}
-                    <li><a class="button" href="{% url 'login' %}">
-                        Login
-                    </a></li>
-                    <li><a class="button" href="{% url 'create_profile' %}">
-                        Create Profile
-                    </a></li>
-                    {% endif %}
                 </ul>
             </nav>
             <div>
                 {% if request.user.is_authenticated %}
                 <p>Currently logged in as: {{request.user}}</p>
+                <form method="post" action="{% url 'logout' %}" >
+                    {% csrf_token %}
+                    <li><input type="submit" value="Logout" class="minibutton"></li>
+                </form>
                 {% else %}
                 <p>Currently not logged in.</p>
+                <a class="minibutton" href="{% url 'login' %}">
+                    Login
+                </a>
+                <a class="minibutton" href="{% url 'create_profile' %}">
+                    Create Profile
+                </a>
+                <br><br>
                 {% endif %}
             </div>
         </header>
